@@ -1,0 +1,8 @@
+ID_TU: plctu63
+Propietario: Andres
+Tipo de identificacion: CC
+Numero de identificacion: 100
+Direccion: Casa
+Estrato: 4
+Fecha de registro: 10-05-2024
+Consumo: 45

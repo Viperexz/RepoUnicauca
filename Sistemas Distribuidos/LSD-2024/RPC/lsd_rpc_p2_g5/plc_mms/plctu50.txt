@@ -1,0 +1,8 @@
+ID_TU: plctu50
+Propietario: CC
+Tipo de identificacion: CC
+Numero de identificacion: 10
+Direccion: Casa
+Estrato: 5
+Fecha de registro: 10-05-2000
+Consumo: 60

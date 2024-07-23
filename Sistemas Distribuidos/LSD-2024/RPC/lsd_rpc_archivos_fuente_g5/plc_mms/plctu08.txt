@@ -1,0 +1,8 @@
+ID_TU: plctu08
+Propietario: Oscar Hyos
+Tipo de identificacion: CC
+Numero de identificacion: 10031
+Direccion: Casa 6
+Estrato: 3
+Fecha de registro: 10-05-2000
+Consumo: 3123

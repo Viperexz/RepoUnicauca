@@ -1,0 +1,35 @@
+module sop_corba{
+interface GestionDispositivos{
+      struct DatosPlcTu_DTO{
+             string id_plctu;
+             string propietario;
+             string tipoIden;
+             string numIden;
+             string direccion;
+             string estrato;
+             string fechaRegistro;
+             long lectura;
+             long consumo;
+       };
+    struct notificacionDTO{
+        long idPlcmms;
+       sequence<DatosPlcTu_DTO> listTU;
+    };
+
+    struct Factura_DTO
+    {
+       string id_plctu;
+       string lecturaIni;
+       string lecturaFin;
+       long consumo;
+    };
+    struct Lectura_DTO
+    {
+     sequence<DatosPlcTu_DTO> listTU;
+    };
+
+    void notificacionmms(in notificacionDTO objNotificacion);
+    long lectura(inout Lectura_DTO objLectura);
+    boolean recuperarFactura(in string IdTu , out Factura_DTO objFactura);
+    };
+};

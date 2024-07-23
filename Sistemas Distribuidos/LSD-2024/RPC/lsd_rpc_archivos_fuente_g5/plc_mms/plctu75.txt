@@ -1,0 +1,8 @@
+ID_TU: plctu75
+Propietario: 0
+Tipo de identificacion: CC
+Numero de identificacion: 0
+Direccion: c
+Estrato: 1
+Fecha de registro: 10-05-2000
+Consumo: 50

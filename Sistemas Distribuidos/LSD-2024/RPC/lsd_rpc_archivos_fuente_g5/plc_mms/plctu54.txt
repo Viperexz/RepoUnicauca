@@ -1,0 +1,8 @@
+ID_TU: plctu54
+Propietario: Oscar Hoyos
+Tipo de identificacion: CC
+Numero de identificacion: 1015
+Direccion: Calle 15
+Estrato: 2
+Fecha de registro: 16-05-2024
+Consumo: 567

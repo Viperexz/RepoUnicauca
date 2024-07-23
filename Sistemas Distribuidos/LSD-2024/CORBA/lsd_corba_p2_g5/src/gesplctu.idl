@@ -1,0 +1,12 @@
+module sop_corba{
+interface GestionPlcTu{
+    struct DatosPlcTu_DTO{
+        string id_plctu;
+        string propietario;
+        string direccion;
+        long consumo;
+    };
+    boolean registrar_plctu(in DatosPlcTu_DTO dplctu);
+    boolean consultarplctu(in long plctuid, out DatosPlcTu_DTO objTU);
+    };
+};

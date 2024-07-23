@@ -1,0 +1,7 @@
+D:\GitHub\POO1\C#\POO1\obj\Debug\POO1.csprojAssemblyReference.cache
+D:\GitHub\POO1\C#\POO1\obj\Debug\POO1.csproj.CoreCompileInputs.cache
+D:\GitHub\POO1\C#\POO1\bin\Debug\libPOO1.dll.config
+D:\GitHub\POO1\C#\POO1\bin\Debug\libPOO1.dll
+D:\GitHub\POO1\C#\POO1\bin\Debug\libPOO1.pdb
+D:\GitHub\POO1\C#\POO1\obj\Debug\libPOO1.dll
+D:\GitHub\POO1\C#\POO1\obj\Debug\libPOO1.pdb

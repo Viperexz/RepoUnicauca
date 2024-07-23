@@ -1,0 +1,8 @@
+ID_TU: plctu14
+Propietario: Oscar Hoyos
+Tipo de identificacion: CC
+Numero de identificacion: 10031
+Direccion: Casa 6
+Estrato: 4
+Fecha de registro: 10-05-2000
+Consumo: 26

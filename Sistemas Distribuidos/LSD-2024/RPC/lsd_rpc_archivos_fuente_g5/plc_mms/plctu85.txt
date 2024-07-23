@@ -1,0 +1,8 @@
+ID_TU: plctu85
+Propietario: Oscar
+Tipo de identificacion: CC
+Numero de identificacion: 1010
+Direccion: casa 6
+Estrato: 4
+Fecha de registro: 03-19-2024
+Consumo: 6

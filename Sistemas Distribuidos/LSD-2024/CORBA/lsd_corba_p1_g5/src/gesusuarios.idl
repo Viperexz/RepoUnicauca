@@ -1,0 +1,12 @@
+module sop_corba{
+interface GestionUsuarios{
+    struct usuarioDTO{
+    long id;
+    string nombreCompleto;
+    string usuario;
+    string clave;
+    };
+    long abrirSesion(in usuarioDTO objUsuario);
+    boolean consultarUsuario(in long id,out usuarioDTO objUsuario);
+    };
+};

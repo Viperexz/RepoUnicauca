@@ -1,0 +1,8 @@
+ID_TU: plctu40
+Propietario: cc
+Tipo de identificacion: CC
+Numero de identificacion: 100
+Direccion: CC
+Estrato: 3
+Fecha de registro: 10-05-2000
+Consumo: 5

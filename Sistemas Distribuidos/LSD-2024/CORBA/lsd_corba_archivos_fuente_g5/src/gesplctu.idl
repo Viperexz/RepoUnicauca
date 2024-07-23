@@ -1,0 +1,38 @@
+#include <gesalertas.idl>
+
+module sop_corba{
+interface GestionPlcTu{
+    struct DatosPlcTu_DTO{
+         string id_plctu;
+         string propietario;
+         string tipoIden;
+         string numIden;
+         string direccion;
+         string estrato;
+         string fechaRegistro;
+         long lectura;
+         long consumo;
+    };
+     struct Factura_DTO
+        {
+           string id_plctu;
+           string lecturaIni;
+           string lecturaFin;
+           long consumo;
+        };
+        struct ListaDto
+        {
+            sequence<DatosPlcTu_DTO> listTU;
+        };
+
+    boolean registrar_plctu(in DatosPlcTu_DTO dplctu);
+    boolean consultarplctu(in long plctuid, out DatosPlcTu_DTO objTU);
+    void registrarCallback(in GestionAlertas objAlertas);
+    void usuariosConectados(in GestionAlertas objUsuario);
+    boolean recuperarLista(out ListaDto objLista);
+    boolean recuperarFactura(in string IdTu , out Factura_DTO objFactura);
+    void notificarFacturas(in string IdTu);
+    void actualizarLista(in ListaDto prmListaTU);
+    boolean eliminarTU(in string idTu);
+    };
+};

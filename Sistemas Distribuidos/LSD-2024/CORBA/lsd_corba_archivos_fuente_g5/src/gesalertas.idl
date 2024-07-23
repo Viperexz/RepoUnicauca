@@ -1,0 +1,11 @@
+module sop_corba{
+interface GestionAlertas{
+
+    struct alertaDto{
+        string usuario;
+        long id;
+        long modo;
+    };
+    void notificar(in alertaDto objAlerta);
+    };
+};
