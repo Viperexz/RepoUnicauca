@@ -1,0 +1,33 @@
+.data-grid-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.data-grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+.data-grid th, .data-grid td {
+    padding: 12px 15px;
+    border: 1px solid #000000;
+    text-align: left;
+
+}
+
+.data-grid th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+
+}
+
+.data-grid tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-grid tr:hover {
+    background-color: #f1f1f1;
+}

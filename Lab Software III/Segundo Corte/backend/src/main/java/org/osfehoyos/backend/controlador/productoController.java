@@ -6,9 +6,11 @@ import org.osfehoyos.backend.modelo.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
-
+@CrossOrigin(origins = "http://localhost:5173") // Add this line
 public class productoController {
 
     @Autowired
@@ -51,8 +53,9 @@ public class productoController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/listar")
-    public void listarProductos(){
-        System.out.println("Listar Productos");
+    public List<producto> listarProductos(){
+        return (List<producto>) productoRepository.findAll();
     }
 }
