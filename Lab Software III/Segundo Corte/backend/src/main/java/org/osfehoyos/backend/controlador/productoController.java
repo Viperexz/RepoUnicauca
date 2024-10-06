@@ -16,7 +16,7 @@ public class productoController {
     @Autowired
     private productoRepository productoRepository;
 
-    @GetMapping("/registro")
+    @PostMapping("/registro")
     public boolean insertarProducto(@RequestBody producto prmProducto){
         try {
             productoRepository.save(prmProducto);
@@ -26,7 +26,7 @@ public class productoController {
             return false;
         }
     }
-    @PutMapping("/{codigo}")
+    @PostMapping("/{codigo}")
     public producto modificarProducto(@PathVariable int codigo, @RequestBody producto productoActualizado) {
         return productoRepository.findById(codigo)
                 .map(producto -> {

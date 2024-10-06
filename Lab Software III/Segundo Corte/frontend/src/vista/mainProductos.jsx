@@ -1,14 +1,18 @@
-import HeaderBar from "../components/HeaderBar.jsx";
+import HeaderBar from "../components/headerBar.jsx";
 import TablaProductos from "../components/tablaProductos.jsx";
 import '../assets/css/mainProductos.css';
-
+import Footer from "../components/footer.jsx";
+import RegisterCard from "../components/registrarCard.jsx";
 function mainProductos() {
     return (
         <>
             <HeaderBar />
-            <body className={'body'}>
-            <TablaProductos />
-            </body>
+            <div className={'body'}>
+                <RegisterCard />
+                <h2>Productos:</h2>
+                <TablaProductos/>
+                <Footer />
+            </div>
 
         </>
     )

@@ -2,30 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import '../assets/css/tablaProductos.css';
+import { editarModal as EditModal } from './modal/editarModal';
+import { eliminarModal as DeleteModal } from './modal/eliminarModal';
 
 export default function TablaProductos() {
     const [rows, setRows] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-    useEffect(() => {
+    const fetchProducts = () => {
         axios.get('http://localhost:8080/api/listar')
             .then(response => {
-                // Map the backend data to the required format
                 const productsWithId = response.data.map((product) => ({
-                    id: product.codigo, // Map codigo to id
-                    name: product.nombre, // Map nombre to name
-                    price: product.precio // Map precio to price
+                    id: product.codigo,
+                    name: product.nombre,
+                    price: product.precio
                 }));
                 setRows(productsWithId);
             })
             .catch(error => {
                 console.error('There was an error fetching the products!', error);
             });
+    };
+
+    useEffect(() => {
+        fetchProducts();
     }, []);
+
+    const handleEditClick = (product) => {
+        setSelectedProduct(product);
+        setEditModalOpen(true);
+    };
+
+    const handleDeleteClick = (product) => {
+        setSelectedProduct(product);
+        setDeleteModalOpen(true);
+    };
+
+    const handleUpdate = () => {
+        fetchProducts();
+    };
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Nombre', width: 130 },
-        { field: 'price', headerName: 'Precio', width: 130 }
+        { field: 'price', headerName: 'Precio', width: 130 },
+        {
+            field: 'actions',
+            headerName: 'Acciones',
+            width: 200,
+            renderCell: (params) => (
+                <div>
+                    <button className={'btnEditar'} onClick={() => handleEditClick(params.row)}>Editar</button>
+                    <button className={'btnEliminar'} onClick={() => handleDeleteClick(params.row)}>Eliminar</button>
+                </div>
+            )
+        }
     ];
 
     return (
@@ -34,11 +67,12 @@ export default function TablaProductos() {
                 rows={rows}
                 columns={columns}
                 pageSize={5}
-                checkboxSelection
                 disableSelectionOnClick
                 className="data-grid"
-                getRowId={(row) => row.id} // Specify custom id for each row
+                getRowId={(row) => row.id}
             />
+            {isEditModalOpen && <EditModal product={selectedProduct} onClose={() => setEditModalOpen(false)} onUpdate={handleUpdate} />}
+            {isDeleteModalOpen && <DeleteModal product={selectedProduct} onClose={() => setDeleteModalOpen(false)} onUpdate={handleUpdate} />}
         </div>
     );
 }
