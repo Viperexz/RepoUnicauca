@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import '../assets/css/tablaProductos.css';
 import { editarModal as EditModal } from './modal/editarModal';
 import { eliminarModal as DeleteModal } from './modal/eliminarModal';
 
-export default function TablaProductos() {
+const TablaProductos = forwardRef((props, ref) => {
     const [rows, setRows] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -29,6 +29,10 @@ export default function TablaProductos() {
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    useImperativeHandle(ref, () => ({
+        fetchProducts
+    }));
 
     const handleEditClick = (product) => {
         setSelectedProduct(product);
@@ -75,4 +79,6 @@ export default function TablaProductos() {
             {isDeleteModalOpen && <DeleteModal product={selectedProduct} onClose={() => setDeleteModalOpen(false)} onUpdate={handleUpdate} />}
         </div>
     );
-}
+});
+
+export default TablaProductos;

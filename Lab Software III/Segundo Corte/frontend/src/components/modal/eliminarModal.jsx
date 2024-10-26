@@ -16,7 +16,6 @@ export function eliminarModal({ product, onClose, onUpdate}) {
             nombre,
             precio
         };
-
         try {
             const response = await fetch(`http://localhost:8080/api/eliminar`, {
                 method: 'DELETE',

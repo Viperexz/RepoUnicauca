@@ -1,7 +1,7 @@
 import React from 'react';
 import '../assets/css/card.css';
 
-export default function registrarCard() {
+export default function registrarCard({ onRegister }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,6 +26,9 @@ export default function registrarCard() {
 
             if (response.ok) {
                 console.log('Product registered successfully');
+                if (onRegister) {
+                    onRegister();
+                }
             } else {
                 console.error('Failed to register product');
             }

@@ -19,7 +19,6 @@ public class producto {
     @Column(precision = 6, scale = 2)
     BigDecimal precio;
 
-
     public int getCodigo() {
         return codigo;
     }

@@ -1,0 +1,8 @@
+.Body {
+    margin-top: 70px; /* Ajusta este valor según la altura de tu HeaderBar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

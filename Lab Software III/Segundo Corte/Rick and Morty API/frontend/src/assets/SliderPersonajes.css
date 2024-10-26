@@ -1,0 +1,27 @@
+/* src/assets/SliderPersonajes.css */
+.slick-slide {
+    padding: 10px;
+}
+
+.Card {
+    padding: 10px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.Card h3 {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.Card p {
+    margin: 5px 0;
+}
