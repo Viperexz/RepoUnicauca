@@ -1,0 +1,11 @@
+@import '../global.css';
+
+button{
+    background: var(--optinal-color1);
+    color: var(--background-color);
+    font: var(--subtitulo-font);
+    width: 220px;
+    height: 50px;
+    border-radius: 20px;
+    border: none;
+}

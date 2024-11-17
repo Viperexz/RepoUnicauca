@@ -1,0 +1,19 @@
+/* src/css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+:root {
+    --primary-color: #203359;
+    --secondary-color: #C2D2F2;
+    --background-color: #0A1626;
+    --optinal-color1: #79f297;
+    --optinal-color2: #60bf78;
+    --optinal-color3: #A10000;
+    --optinal-color4: #4a90E2;
+    --optinal-color5: #ffffff;
+    --optinal-color6: #FFA500;
+    --titulo-font: 35px 'Inter', bold;
+    --subtitulo-font: 20px 'Inter', bold;
+    --encabezado-font: 15px 'Inter', bold;
+    --parrafo-font: 10px 'Inter', regular;
+}
+

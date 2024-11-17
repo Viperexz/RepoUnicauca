@@ -1,0 +1,66 @@
+
+/* src/css/App.css */
+@import 'global.css';
+
+.App {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+
+.containerLogo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    background-color: var(--primary-color);
+    border-right: 2px solid var(--optinal-color3);
+}
+
+.containerLogin {
+    width: 60%;
+    background-color: var(--background-color); /* Color de fondo opcional */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+}
+
+/* Otros estilos existentes */
+.Titulo {
+    font: var(--titulo-font);
+    color: var(--optinal-color5);
+}
+
+
+.subSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+p{
+    font: var(--parrafo-font);
+    color: var(--optinal-color5);
+}
+
+@media (max-width: 768px) {
+    .containerLogo {
+        display: none;
+    }
+    .containerLogin {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px)
+{
+    .hiddenLogo {
+        display: none;
+    }
+}
