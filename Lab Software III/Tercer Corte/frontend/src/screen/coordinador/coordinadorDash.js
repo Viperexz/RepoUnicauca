@@ -6,8 +6,10 @@ function CoordinadorDash() {
     return (
         <div className={'backgroundContainer'}>
             <Menu rol={rol} />
-            <div>
-                <h1>Coordinador</h1>
+            <div className={'dashContainer'}>
+                <h1> Coordinador </h1>
+                <p> Bienvenido al sistema gestor de resultados de aprendizaje.</p>
+                <p> Navegue por las opciones de su derecha para interactuar con los diferentes modulos</p>
             </div>
 
         </div>

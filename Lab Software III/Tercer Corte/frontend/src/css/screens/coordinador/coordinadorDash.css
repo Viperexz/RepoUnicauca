@@ -7,3 +7,16 @@
     height: 100vh; /* Ocupa toda la altura de la pantalla */
 }
 
+.dashContainer{
+    background-color: var(--background-color); /* Optional background color */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    width: 70%;
+    height: 95%; /* Height of 1000px */
+    margin-left: 30px; /* Margin of 30px from the left edge */
+    position: absolute; /* Position it absolutely */
+    left: 350px; /* Align it to the left side of the screen */
+    border-radius: 15px;
+}
+
