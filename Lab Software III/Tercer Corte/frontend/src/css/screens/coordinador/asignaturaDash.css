@@ -1,0 +1,55 @@
+.asignaturaContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: var(--secondary-color);
+    width: 95%;
+    height: 95%;
+    overflow: hidden;
+    border-radius: 10px;
+
+}
+
+.optionHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 50px;
+    background-color: var(--primary-color);
+    padding: 10px 15px;
+}
+
+.optionHeader > * {
+    margin: 0 15px;
+}
+
+.customButton {
+    background-color: var(--background-color);
+    color: var(--secondary-color);
+    font: var(--encabezado-font);
+}
+
+.customButton .icon {
+    color: var(--optinal-color2);
+}
+
+
+
+.asignTable {
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    overflow: auto;
+    font: var(--encabezado-font);
+
+}
+
+h3{
+    color: var(--secondary-color);
+    font: var(--subtitulo-font);
+}

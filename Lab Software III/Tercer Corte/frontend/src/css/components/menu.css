@@ -2,27 +2,28 @@
 @import '../global.css';
 
 .menu {
-    background-color: var(--background-color); /* Optional background color */
+    background-color: var(--background-color);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center content horizontally */
+    align-items: center;
     width: 22%;
-    height: 95%; /* Height of 1000px */
-    margin-left: 30px; /* Margin of 30px from the left edge */
-    position: absolute; /* Position it absolutely */
-    left: 0; /* Align it to the left side of the screen */
+    height: 95%;
+    margin-left: 30px;
+    position: absolute;
+    left: 0;
     border-radius: 15px;
+    justify-content: space-between;
 }
 
-h
-
 .userData {
-    margin-top: 60px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    border-bottom: 2px solid var(--optinal-color5);
 }
+
 .userData img {
     border-radius: 50%;
     width: 100px;
@@ -30,18 +31,18 @@ h
     object-fit: cover;
 }
 
-.nombreUsuario{
+.nombreUsuario {
     font: var(--encabezado-font);
 }
 
-.rolUsuario{
+.rolUsuario {
     font: var(--parrafo-font);
 }
 
 .menuOptions {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center buttons horizontally */
+    align-items: center;
 }
 
 .menuButton {
@@ -57,14 +58,57 @@ h
     padding-left: 40px;
 }
 
-
 .menuButton .icon {
     position: absolute;
     font: 25px 'Inter', bold;
     left: 10px;
 }
 
-.menuButton .etiquetaBoton{
+.menuButton .etiquetaBoton {
     font: var(--encabezado-font);
     color: var(--background-color);
+}
+
+.menuFooter {
+    margin-top: auto;
+    text-align: center;
+}
+
+.cerraSesion {
+    background-color: var(--optinal-color4);
+    color: var(--background-color);
+    border-radius: 15px;
+    padding: 5px;
+    font: var(--parrafo-font);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .menu {
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+        position: relative;
+        border-radius: 0;
+    }
+
+    .menuButton {
+        width: 90%;
+        padding-left: 30px;
+    }
+
+    .menuButton .icon {
+        left: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menuButton {
+        width: 100%;
+        padding-left: 20px;
+    }
+
+    .menuButton .icon {
+        left: 5px;
+    }
 }

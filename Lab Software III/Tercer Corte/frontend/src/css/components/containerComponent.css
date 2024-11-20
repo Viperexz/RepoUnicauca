@@ -1,0 +1,27 @@
+@import '../global.css';
+
+.dashContainer{
+    background-color: var(--background-color); /* Optional background color */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    width: 70%;
+    height: 95%; /* Height of 1000px */
+    margin-left: 30px; /* Margin of 30px from the left edge */
+    position: absolute; /* Position it absolutely */
+    left: 350px; /* Align it to the left side of the screen */
+    border-radius: 15px;
+}
+h1{
+    color: var(--secondary-color);
+    font: var(--titulo-font);
+}
+
+.containerTitle {
+    border-bottom: 2px solid var(--optinal-color5);
+    width: 100%;
+    text-align: center; /* Center the title */
+
+}
+
+

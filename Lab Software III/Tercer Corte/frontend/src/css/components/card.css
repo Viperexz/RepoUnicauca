@@ -1,0 +1,25 @@
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+}
+
+.cardHeader .icon {
+    background-color: var(--optinal-color1);
+    padding: 10px;
+    border-radius: 15px 0 0 15px;
+}
+
+.cardHeader h4 {
+    background-color: var(--optinal-color2);
+    padding: 10px;
+    border-radius: 0 15px 15px 0;
+    margin: 0;
+    color: var(--optinal-color7);
+}

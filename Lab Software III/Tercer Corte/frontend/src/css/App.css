@@ -1,9 +1,9 @@
-
 /* src/css/App.css */
 @import 'global.css';
 
 .App {
-  text-align: center;
+    background-color: var(--primary-color); /* Asegúrate de que el fondo cubra toda la pantalla */
+    text-align: center;
 }
 
 .container {

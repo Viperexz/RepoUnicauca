@@ -1,8 +1,12 @@
 // src/components/ButtonComponent.jsx
 import '../css/components/buttonStyle.css';
-function ButtonComponent({ title }) {
+
+function ButtonComponent({ title, icon, onClick, className }) {
   return (
-      <button>{title}</button>
+    <button onClick={onClick} className={className}>
+      {icon && <span className="icon">{icon}</span>}
+      {title}
+    </button>
   );
 }
 

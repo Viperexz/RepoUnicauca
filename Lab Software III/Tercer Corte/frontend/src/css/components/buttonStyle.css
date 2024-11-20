@@ -1,6 +1,6 @@
 @import '../global.css';
 
-button{
+button {
     background: var(--optinal-color1);
     color: var(--background-color);
     font: var(--subtitulo-font);
@@ -8,4 +8,24 @@ button{
     height: 50px;
     border-radius: 20px;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+button:hover {
+    box-shadow: var(--optinal-color2) 0px 0px 10px;
+ }
+
+button .icon {
+    margin-right: 8px; /* Espacio entre el ícono y el título */
+    display: flex;
+    align-items: center;
+}
+
+.containerLogin div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

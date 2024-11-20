@@ -5,13 +5,15 @@ import Dev from "../img/logo/Dev.jpg";
 import { FaHome, FaUser, FaCog } from 'react-icons/fa';
 import { TbMedal2 } from "react-icons/tb";
 import { FiBookOpen, FiUsers  } from "react-icons/fi";
+import {useNavigate} from "react-router-dom";
 
 function Menu({ rol }) {
+    const navigate = useNavigate();
     const menuItems = rol === 1 ? [
-        { icon: <TbMedal2 />, label: 'Competencias y RA por Programa' },
-        { icon: <FiBookOpen />, label: 'Asignaturas' },
+        { icon: <TbMedal2 />, label: 'Competencias y RA por Programa', route: () => navigate('/competencias-programa') },
+        { icon: <FiBookOpen />, label: 'Asignaturas', route: () => navigate('/coordinador/asignaturas') },
         { icon: <FiUsers />, label: 'Docentes' },
-        { icon: <TbMedal2 />, label: 'Comepencias y RA por Asignatura' }
+        { icon: <TbMedal2 />, label: 'Competencias y RA por Asignatura' }
     ] : [
         { icon: <FaHome />, label: 'Test 4' },
         { icon: <FaUser />, label: 'Test 5' },
@@ -27,11 +29,14 @@ function Menu({ rol }) {
             </div>
             <div className={'menuOptions'}>
             {menuItems.map((item, index) => (
-                <button key={index} className={'menuButton'}>
+                <button key={index} className={'menuButton'} onClick={item.route} >
                     <span className="icon">{item.icon}</span>
                     <p className={'etiquetaBoton'}>{item.label}</p>
                 </button>
             ))}
+            </div>
+            <div className={'menuFooter'}>
+                <p className={'cerraSesion'}>Cerrar Sesión</p>
             </div>
         </div>
     );

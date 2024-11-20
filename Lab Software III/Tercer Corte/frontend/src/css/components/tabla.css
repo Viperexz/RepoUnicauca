@@ -1,0 +1,34 @@
+.generalTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.generalTable th, .generalTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.generalTable th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.edit-icon, .delete-icon {
+  cursor: pointer;
+  font-size: 25px; /* Adjust the size of the icons */
+  margin: 0 5px;
+}
+
+.edit-icon {
+  color: var(--optinal-color4); /* Green */
+}
+
+.delete-icon {
+  color: var(--optinal-color3); /* Red */
+}
+
+td:last-child {
+  display: flex;
+  justify-content: space-between;
+}
