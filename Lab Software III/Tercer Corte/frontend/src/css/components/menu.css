@@ -79,7 +79,12 @@
     color: var(--background-color);
     border-radius: 15px;
     padding: 5px;
-    font: var(--parrafo-font);
+    font: var(--encabezado-font);
+
+}
+.homeButton{
+    color: var(--optinal-color5);
+    font: var(--subtitulo-font);
 }
 
 /* Media queries for responsiveness */

@@ -6,6 +6,9 @@ import App from "./App";
 import LoadingScreen from './components/LoadingScreen';
 import CrearAsignatura from "./screen/coordinador/asignaturas/crearAsignatura";
 import EditarAsignatura from "./screen/coordinador/asignaturas/editarAsignatura";
+import DocenteDash from "./screen/coordinador/docente/docenteDash";
+import CrearDocente from "./screen/coordinador/docente/crearDocente";
+import EditarDocente from "./screen/coordinador/docente/editarDocente";
 
 function AppRoutes() {
     const location = useLocation();
@@ -28,7 +31,10 @@ function AppRoutes() {
                         <Route path="/coordinador/asignaturas" element={<AsignaturaDash />} />
                         <Route path="/coordinador/asignaturas/crear" element={<CrearAsignatura/>} />
                         <Route path="/coordinador/asignaturas/editar" element={<EditarAsignatura/>} />
-
+                        {/* Rutas Gestion Docentes/> */}
+                        <Route path="/coordinador/docentes" element={<DocenteDash />} />
+                        <Route path="/coordinador/docentes/crear" element={<CrearDocente/>} />
+                        <Route path="/coordinador/docentes/editar" element={<EditarDocente/>} />
                     </Routes>
         </>
     );

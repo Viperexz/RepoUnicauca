@@ -53,3 +53,26 @@ select{
     width: 125px; /* Ajusta el ancho */
     height: 35px; /* Ajusta la altura */
 }
+.input
+{
+    width: 250px; /* Ajusta el ancho */
+    height: 35px; /* Ajusta la altura */
+}
+
+h3{
+    font: var(--encabezado-font);
+    margin: 0;
+}
+
+.btnCrear{
+    font: var(--encabezado-font);
+    width: 125px; /* Ajusta el ancho */
+    height: 45px; /* Ajusta la altura */
+}
+
+h2{
+    font: var(--subtitulo-font);
+    margin: 0;
+    padding-top: 5px;
+    color: var(--optinal-color5);
+}

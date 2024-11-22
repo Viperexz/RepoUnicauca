@@ -12,7 +12,7 @@ function EditarAsginatura() {
     const renderOptionSection = (title, isSelect = true , options = []) => (
         <div className={'optionSection'}>
             <h3>{title}</h3>
-            {isSelect ? <select options={options} /> : <InputField placeholder={title}  />}
+            {isSelect ? <select options={options} /> : <InputField placeholder={title} inputClassName={'input'} />}
         </div>
     );
 
@@ -27,6 +27,7 @@ function EditarAsginatura() {
         <div className={'backgroundContainer'}>
             <Menu rol={rol} />
             <ContainerComponent Title={'Gestion de asignaturas'}>
+                <h2> Editar asignatura </h2>
                 <div className={'crearAsignatura'}>
                     <div className={'innerSection'}>
                         {renderOptionSection('Nombre asignatura:', false)}
@@ -41,7 +42,7 @@ function EditarAsginatura() {
                     </div>
                 </div>
                 <div className={'innerSection'}>
-                    <ButtonComponent title={'Crear asignatura'} />
+                    <ButtonComponent title={'Editar asignatura'} className={'btnCrear'}/>
                 </div>
             </ContainerComponent>
         </div>

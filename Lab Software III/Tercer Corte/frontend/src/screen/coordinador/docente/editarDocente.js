@@ -6,13 +6,13 @@ import InputField from "../../../components/inputField";
 import ButtonComponent from "../../../components/buttonComponent";
 import Select from "react-select/base";
 
-function CrearAsignatura() {
+function EditarDocente() {
     const rol = 1;
 
     const renderOptionSection = (title, isSelect = true , options = []) => (
         <div className={'optionSection'}>
             <h3>{title}</h3>
-            {isSelect ? <select options={options} /> : <InputField placeholder={title} inputClassName={'input'}  />}
+            {isSelect ? <select options={options} /> : <InputField placeholder={title} inputClassName={'input'} />}
         </div>
     );
 
@@ -26,27 +26,31 @@ function CrearAsignatura() {
     return (
         <div className={'backgroundContainer'}>
             <Menu rol={rol} />
-            <ContainerComponent Title={'Gestion de asignaturas'}>
-                <h2> Crear asignatura </h2>
+            <ContainerComponent Title={'Gestion de docentes'}>
+                <h2> Editar docente </h2>
                 <div className={'crearAsignatura'}>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nombre asignatura:', false)}
-                        {renderOptionSection('Creditos de la asignatura:', true, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])}
-                        {renderOptionSection('Semestre')}
+                        {renderOptionSection('Nombre Docente:', false)}
+                        {renderOptionSection('Apellido Docente:', false)}
                     </div>
-                    <h3>Descripcion:</h3>
-                    <textarea className={'txtDescripcion'}/>
                     <div className={'innerSection'}>
-                        {renderInnerSection('Competencia')}
-                        {renderInnerSection('Resultados')}
+                        {renderOptionSection('Tipo identificacion:', true)}
+                        {renderOptionSection('Identificacion:', false)}
                     </div>
+                    <div className={'innerSection'}>
+                        {renderOptionSection('Titulo academico:', true)}
+                    </div>
+                    <div className={'innerSection'}>
+                        {renderInnerSection('Asginar asignatura')}
+                    </div>
+
                 </div>
                 <div className={'innerSection'}>
-                    <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
+                    <ButtonComponent title={'Editar asignatura'} className={'btnCrear'}/>
                 </div>
             </ContainerComponent>
         </div>
     );
 }
 
-export default CrearAsignatura;
+export default EditarDocente;

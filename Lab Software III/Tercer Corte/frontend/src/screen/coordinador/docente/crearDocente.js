@@ -6,7 +6,7 @@ import InputField from "../../../components/inputField";
 import ButtonComponent from "../../../components/buttonComponent";
 import Select from "react-select/base";
 
-function CrearAsignatura() {
+function CrearDocente() {
     const rol = 1;
 
     const renderOptionSection = (title, isSelect = true , options = []) => (
@@ -49,4 +49,4 @@ function CrearAsignatura() {
     );
 }
 
-export default CrearAsignatura;
+export default CrearDocente;
