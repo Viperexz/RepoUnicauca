@@ -1,13 +1,16 @@
-import Menu from '../../../components/menu';
 import "../../../css/screens/coordinador/crearAsignatura.css";
 import React from "react";
-import ContainerComponent from "../../../components/containerComponent";
-import InputField from "../../../components/inputField";
-import ButtonComponent from "../../../components/buttonComponent";
-import Select from "react-select/base";
+import InputField from "../../../components/general/inputField";
+import ButtonComponent from "../../../components/general/buttonComponent";
+import ScreenBasic from "../../../components/general/ScreenBasic";
 
 function CrearDocente() {
     const rol = 1;
+
+    const enviarFormulario = (e) => {
+        e.preventDefault();
+        console.log('Formulario enviado');
+    }
 
     const renderOptionSection = (title, isSelect = true , options = []) => (
         <div className={'optionSection'}>
@@ -24,29 +27,34 @@ function CrearDocente() {
     );
 
     return (
-        <div className={'backgroundContainer'}>
-            <Menu rol={rol} />
-            <ContainerComponent Title={'Gestion de asignaturas'}>
+        <ScreenBasic rol={rol} Title={'Gestion de docentes'}>
+            <form>
                 <h2> Crear asignatura </h2>
                 <div className={'crearAsignatura'}>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nombre asignatura:', false)}
-                        {renderOptionSection('Creditos de la asignatura:', true, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])}
-                        {renderOptionSection('Semestre')}
+                        {renderOptionSection('Nombre:', false)}
+                        {renderOptionSection('Apellidos:', false)}
                     </div>
-                    <h3>Descripcion:</h3>
-                    <textarea className={'txtDescripcion'}/>
                     <div className={'innerSection'}>
-                        {renderInnerSection('Competencia')}
-                        {renderInnerSection('Resultados')}
+                        {renderOptionSection('Tipo de identificacion:', true)}
+                        {renderOptionSection('Identificacion:', false)}
+                    </div>
+                    <div className={'innerSection'}>
+                        {renderOptionSection('Tipo de contrato:', true)}
+                        {renderOptionSection('Correo electronico:', false)}
+
+                    </div>
+                    <div className={'innerSection'}>
+                        {renderInnerSection('Asignaturas', false)}
                     </div>
                 </div>
                 <div className={'innerSection'}>
                     <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
                 </div>
-            </ContainerComponent>
-        </div>
-    );
+            </form>
+        </ScreenBasic>
+)
+    ;
 }
 
 export default CrearDocente;

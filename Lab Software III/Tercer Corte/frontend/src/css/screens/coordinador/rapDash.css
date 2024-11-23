@@ -1,0 +1,25 @@
+.buttonListHeader{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding:10px;
+}
+
+.buttonHeader{
+    background-color: var(--secondary-color);
+    border-radius: 15px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.buttonHeader:hover{
+    background-color: #e6e6e6;
+}
+.buttonHeader .icon{
+    font-size: 35px;
+}
+.buttonHeader:active{
+    color: var(--secondary-color);
+    background-color: var(--primary-color);
+}
+

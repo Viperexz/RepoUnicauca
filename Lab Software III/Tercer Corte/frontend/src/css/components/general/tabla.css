@@ -4,15 +4,23 @@
 }
 
 .generalTable th, .generalTable td {
-  border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+
 }
 
 .generalTable th {
   background-color: var(--primary-color);
   color: white;
+  border: var(--secondary-color) 1px solid;
+  font: var(--encabezado-font);
 }
+.generalTable td {
+  border: var(--primary-color) 1px solid;
+  font: var(--encabezado-font);
+}
+
+
 
 .edit-icon, .delete-icon {
   cursor: pointer;

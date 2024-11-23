@@ -1,5 +1,5 @@
 // src/components/ButtonComponent.jsx
-import '../css/components/buttonStyle.css';
+import '../../css/components/general/buttonStyle.css';
 
 function ButtonComponent({ title, icon, onClick, className }) {
   return (

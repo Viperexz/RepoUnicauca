@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import CoordinadorDash from './screen/coordinador/coordinadorDash';
 import AsignaturaDash from './screen/coordinador/asignaturas/asignaturaDash';
 import App from "./App";
-import LoadingScreen from './components/LoadingScreen';
+import LoadingScreen from './components/general/LoadingScreen';
 import CrearAsignatura from "./screen/coordinador/asignaturas/crearAsignatura";
 import EditarAsignatura from "./screen/coordinador/asignaturas/editarAsignatura";
 import DocenteDash from "./screen/coordinador/docente/docenteDash";
 import CrearDocente from "./screen/coordinador/docente/crearDocente";
 import EditarDocente from "./screen/coordinador/docente/editarDocente";
+import RaaDash from "./screen/coordinador/RAA/raaDash";
+import RapDash from "./screen/coordinador/RAP/rapDash";
 
 function AppRoutes() {
     const location = useLocation();
@@ -35,6 +37,10 @@ function AppRoutes() {
                         <Route path="/coordinador/docentes" element={<DocenteDash />} />
                         <Route path="/coordinador/docentes/crear" element={<CrearDocente/>} />
                         <Route path="/coordinador/docentes/editar" element={<EditarDocente/>} />
+                        {/* Rutas RAA/> */}
+                        <Route path="/coordinador/RAA" element={<RaaDash/>} />
+                        {/* Rutas RAP/> */}
+                        <Route path="/coordinador/RAP" element={<RapDash/>} />
                     </Routes>
         </>
     );

@@ -1,10 +1,8 @@
-import Menu from '../../../components/menu';
 import "../../../css/screens/coordinador/crearAsignatura.css";
 import React from "react";
-import ContainerComponent from "../../../components/containerComponent";
-import InputField from "../../../components/inputField";
-import ButtonComponent from "../../../components/buttonComponent";
-import Select from "react-select/base";
+import InputField from "../../../components/general/inputField";
+import ButtonComponent from "../../../components/general/buttonComponent";
+import ScreenBasic from "../../../components/general/ScreenBasic";
 
 function CrearAsignatura() {
     const rol = 1;
@@ -24,9 +22,9 @@ function CrearAsignatura() {
     );
 
     return (
-        <div className={'backgroundContainer'}>
-            <Menu rol={rol} />
-            <ContainerComponent Title={'Gestion de asignaturas'}>
+
+
+        <ScreenBasic rol={rol}  Title={'Gestion de asignaturas'} >
                 <h2> Crear asignatura </h2>
                 <div className={'crearAsignatura'}>
                     <div className={'innerSection'}>
@@ -44,8 +42,7 @@ function CrearAsignatura() {
                 <div className={'innerSection'}>
                     <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
                 </div>
-            </ContainerComponent>
-        </div>
+        </ScreenBasic>
     );
 }
 
