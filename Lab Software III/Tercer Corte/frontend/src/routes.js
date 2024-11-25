@@ -11,6 +11,8 @@ import CrearDocente from "./screen/coordinador/docente/crearDocente";
 import EditarDocente from "./screen/coordinador/docente/editarDocente";
 import RaaDash from "./screen/coordinador/RAA/raaDash";
 import RapDash from "./screen/coordinador/RAP/rapDash";
+import CrearRAPComp from "./screen/coordinador/RAP/crearRAPComp";
+import EditarRAPComp from "./screen/coordinador/RAP/editarRAPComp";
 
 function AppRoutes() {
     const location = useLocation();
@@ -41,6 +43,8 @@ function AppRoutes() {
                         <Route path="/coordinador/RAA" element={<RaaDash/>} />
                         {/* Rutas RAP/> */}
                         <Route path="/coordinador/RAP" element={<RapDash/>} />
+                        <Route path="/coordinador/RAP/crear" element={<CrearRAPComp/>} />
+                        <Route path="/coordinador/RAP/editar" element={<EditarRAPComp/>} />
                     </Routes>
         </>
     );

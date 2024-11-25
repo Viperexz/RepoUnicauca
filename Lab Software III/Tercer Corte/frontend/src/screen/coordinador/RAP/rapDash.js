@@ -11,29 +11,33 @@ import "../../../css/screens/coordinador/rapDash.css";
 function RapDash() {
     const navigate = useNavigate();
     const [activeTable, setActiveTable] = useState('competencias');
-    const rol = 1;
 
-    const competenciaHeaders = ["ID","Descripcion","Nivel"];
+
+    const competenciaHeaders = ["ID","Nombre","Descripcion","Nivel"];
     const rapHeaders = ["ID", "Competencias","Descripcion"];
 
     const competenciaData = [
         {
             ID: 1,
+            Nombre: "Competencia 1",
             Descripcion: "Capacidad de análisis crítico",
             Nivel: "Avanzado"
         },
         {
             ID: 2,
+            Nombre: "Competencia 2",
             Descripcion: "Habilidad en resolución de problemas",
             Nivel: "Intermedio"
         },
         {
             ID: 3,
+            Nombre: "Competencia 3",
             Descripcion: "Comunicación efectiva",
             Nivel: "Básico"
         },
         {
             ID: 4,
+            Nombre: "Competencia 4",
             Descripcion: "Trabajo en equipo",
             Nivel: "Avanzado"
         }
@@ -63,14 +67,16 @@ function RapDash() {
     ];
 
     const handleViewCreate = () => {
-        navigate('/coordinador/asignaturas/crear');
-    };
-    const handleViewEdit = () => {
-        navigate('/coordinador/asignaturas/editar');
+        navigate('/coordinador/RAP/crear');
     };
 
+    const handleViewEdit = (rowData) => {
+        navigate('/coordinador/RAP/editar', { state: { rowData } });
+    };
+
+
     return (
-        <ScreenBasic rol={rol} Title={'Gestion de competencias y RA por Asignatura'}>
+        <ScreenBasic  Title={'Gestion de competencias y RA por Asignatura'}>
             <div className={'buttonListHeader'}>
                 <ButtonComponent
                     title={'Competencias'}

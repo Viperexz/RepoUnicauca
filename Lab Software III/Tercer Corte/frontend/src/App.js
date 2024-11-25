@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import './css/App.css';
 import ButtonComponent from "./components/general/buttonComponent";
 import InputField from "./components/general/inputField";
@@ -7,16 +7,29 @@ import { MdLockOutline } from "react-icons/md";
 import Unicauca from './img/logo/Unicauca.jpg';
 import Dev from './img/logo/Dev.jpg';
 import { useNavigate } from 'react-router-dom';
+import {UserContext} from "./components/Contexto/UsuarioContext";
 
 function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
     console.log('Usuario:', username);
     console.log('Contraseña:', password);
+
+    // Simulate user data retrieval
+    const userData = {
+      numIdUsuario: '123456789',
+      nombreUsuario: 'Oscar',
+      apellidoUsuario:'Hoyos',
+      corroUsuario:'oscar@unicauca.edu.co',
+      rol: 1
+    };
+
+    setUser(userData);
     navigate('/coordinador', { state: { username, password } });
   };
 

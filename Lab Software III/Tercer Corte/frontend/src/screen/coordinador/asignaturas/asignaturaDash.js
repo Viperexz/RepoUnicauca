@@ -8,7 +8,7 @@ import ScreenBasic from "../../../components/general/ScreenBasic";
 
 function AsignaturaDash() {
     const navigate = useNavigate();
-    const rol = 1;
+    
     const headers = ["ID","Nombre", "Descripcion", "Creditos", "Semestres", "Competencia" , "Estado", "RAP"];
     const data = [
         {
@@ -64,7 +64,7 @@ function AsignaturaDash() {
 
 
     return (
-        <ScreenBasic rol={rol}  Title={'Gestion de asignaturas'} >
+        <ScreenBasic   Title={'Gestion de asignaturas'} >
             <div className={'asignaturaContainer'}>
                 <div className={'optionHeader'}>
                     <h3>Se listaran las asignaturas</h3>

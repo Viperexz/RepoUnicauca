@@ -5,17 +5,41 @@ import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 
 function CrearDocente() {
-    const rol = 1;
 
-    const enviarFormulario = (e) => {
+    const tid = [
+        { value: 'cc', label: 'Cedula' },
+        { value: 'ce', label: 'Cedula Extrangera' },
+        { value: 'ps', label: 'Pasaporte' },
+    ];
+
+    const contrato = [
+        { value: 'ca', label: 'Catedratico' },
+        { value: 'oc', label: 'Ocacional' },
+        { value: 'pla', label: 'Planta' },
+    ];
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Formulario enviado');
-    }
+        console.log();
+    };
 
-    const renderOptionSection = (title, isSelect = true , options = []) => (
+
+
+
+    const renderOptionSection = (title, isSelect = true, options = []) => (
         <div className={'optionSection'}>
             <h3>{title}</h3>
-            {isSelect ? <select options={options} /> : <InputField placeholder={title} inputClassName={'input'}  />}
+            {isSelect ? (
+                <select>
+                    {options.map((option, index) => (
+                        <option key={index} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+            ) : (
+                <InputField placeholder={title} />
+            )}
         </div>
     );
 
@@ -27,29 +51,31 @@ function CrearDocente() {
     );
 
     return (
-        <ScreenBasic rol={rol} Title={'Gestion de docentes'}>
+        <ScreenBasic  Title={'Gestion de docentes'}>
             <form>
                 <h2> Crear asignatura </h2>
                 <div className={'crearAsignatura'}>
-                    <div className={'innerSection'}>
-                        {renderOptionSection('Nombre:', false)}
-                        {renderOptionSection('Apellidos:', false)}
-                    </div>
-                    <div className={'innerSection'}>
-                        {renderOptionSection('Tipo de identificacion:', true)}
-                        {renderOptionSection('Identificacion:', false)}
-                    </div>
-                    <div className={'innerSection'}>
-                        {renderOptionSection('Tipo de contrato:', true)}
-                        {renderOptionSection('Correo electronico:', false)}
+                    <form className={'formContainer'} onSubmit={handleSubmit}>
+                        <div className={'innerSection'}>
+                            {renderOptionSection('Nombre:', false)}
+                            {renderOptionSection('Apellidos:', false)}
+                        </div>
+                        <div className={'innerSection'}>
+                            {renderOptionSection('Tipo de identificacion:', true, tid)}
+                            {renderOptionSection('Identificacion:', false)}
+                        </div>
+                        <div className={'innerSection'}>
+                            {renderOptionSection('Tipo de contrato:', true, contrato)}
+                            {renderOptionSection('Correo electronico:', false)}
 
-                    </div>
-                    <div className={'innerSection'}>
-                        {renderInnerSection('Asignaturas', false)}
-                    </div>
+                        </div>
+                        <div className={'innerSection'}>
+                            {renderInnerSection('Asignaturas', false)}
+                        </div>
+                    </form>
                 </div>
                 <div className={'innerSection'}>
-                    <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
+                <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
                 </div>
             </form>
         </ScreenBasic>

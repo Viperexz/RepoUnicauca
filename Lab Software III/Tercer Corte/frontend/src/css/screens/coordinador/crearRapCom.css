@@ -1,0 +1,17 @@
+.inputRap{
+    width: 100vh;
+}
+
+.tituloDescripcion{
+    padding-bottom: 15px;
+}
+
+.selectOption{
+    height: 50px;
+    font: var(--encabezado-font);
+    border-radius: 15px;
+}
+
+.selectOption option {
+    padding: 15px;
+}

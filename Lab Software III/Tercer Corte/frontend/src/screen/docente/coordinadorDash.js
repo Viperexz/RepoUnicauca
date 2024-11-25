@@ -4,13 +4,13 @@ import {FaHome} from "react-icons/fa";
 import Card from "../../components/general/Card";
 import ScreenBasic from "../../components/general/ScreenBasic";
 
-function CoordinadorDash() {
+function DocenteDash() {
      // Define el rol aquí
     return (
 
             <ScreenBasic  Title={'Dashboard'}>>
                 <h4> Bienvenido al sistema gestor de resultados de aprendizaje.</h4>
-                <h4> Navegue por las opciones de su derecha para interactuar con los diferentes modulos.</h4>
+                <h4> Navegue por las opciones del menu para interactuar con los diferentes modulos.</h4>
                 <div className={'listaCards'}>
                     <Card
                         title="Docentes registrados: 50 "
@@ -32,4 +32,4 @@ function CoordinadorDash() {
 }
 
 
-export default CoordinadorDash;
+export default DocenteDash;

@@ -11,7 +11,7 @@ import "../../../css/screens/coordinador/rapDash.css";
 function RaaDash() {
     const navigate = useNavigate();
     const [activeTable, setActiveTable] = useState('competencias');
-    const rol = 1;
+    
 
     const competenciaHeaders = ["ID","Descripcion","Nivel"];
     const rapHeaders = ["ID", "Competencias","Descripcion"];
@@ -70,7 +70,7 @@ function RaaDash() {
     };
 
     return (
-        <ScreenBasic rol={rol} Title={'Gestion de competencias y RA por Asignatura'}>
+        <ScreenBasic  Title={'Gestion de competencias y RA por Asignatura'}>
             <div className={'buttonListHeader'}>
                 <ButtonComponent
                     title={'Competencias'}

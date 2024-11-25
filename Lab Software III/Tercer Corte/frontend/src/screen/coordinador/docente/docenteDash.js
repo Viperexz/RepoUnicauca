@@ -12,7 +12,7 @@ import ScreenBasic from "../../../components/general/ScreenBasic";
 
 function DocenteDash() {
     const navigate = useNavigate();
-    const rol = 1; // Define el rol aquí
+     // Define el rol aquí
 
     const [searchField, setSearchField] = useState("Nombre");
     const [searchQuery, setSearchQuery] = useState("");
@@ -70,7 +70,7 @@ function DocenteDash() {
     });
 
     return (
-        <ScreenBasic rol={rol} Title={'Gestion de docentes'}>
+        <ScreenBasic  Title={'Gestion de docentes'}>
             <div className={'asignaturaContainer'}>
                 <div className={'optionHeader'}>
                     <h3>Se listaran los docentes registrados</h3>
