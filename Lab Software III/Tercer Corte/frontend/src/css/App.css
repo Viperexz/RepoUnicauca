@@ -32,6 +32,17 @@
     height: 100vh; /* Ocupa toda la altura de la pantalla */
 }
 
+.containerLogin form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.containerLogin form button {
+    width: 100%; /* Ajusta el ancho del botón según sea necesario */
+    max-width: 300px; /* Ajusta el valor según sea necesario */
+}
+
 /* Otros estilos existentes */
 .Titulo {
     font: var(--titulo-font);

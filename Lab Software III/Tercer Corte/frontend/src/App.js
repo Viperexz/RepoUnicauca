@@ -63,6 +63,7 @@ function App() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required = {true}
               />
               <InputField
                 placeholder="Contraseña"
@@ -70,6 +71,7 @@ function App() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required = {true}
               />
               <ButtonComponent title="Iniciar Sesion" type="submit" />
             </form>
