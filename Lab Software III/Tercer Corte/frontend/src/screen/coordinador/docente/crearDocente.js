@@ -52,7 +52,7 @@ function CrearDocente() {
 
     return (
         <ScreenBasic  Title={'Gestion de docentes'}>
-            <form>
+
                 <h2> Crear asignatura </h2>
                 <div className={'crearAsignatura'}>
                     <form className={'formContainer'} onSubmit={handleSubmit}>
@@ -75,9 +75,8 @@ function CrearDocente() {
                     </form>
                 </div>
                 <div className={'innerSection'}>
-                <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
+                <ButtonComponent title={'Crear asignatura'} className={'btnCrear'} type/>
                 </div>
-            </form>
         </ScreenBasic>
 )
     ;

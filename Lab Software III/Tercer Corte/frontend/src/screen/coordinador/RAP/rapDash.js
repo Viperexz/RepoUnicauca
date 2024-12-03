@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
 import { CiMedal, CiTrophy } from "react-icons/ci";
@@ -7,64 +7,39 @@ import ButtonComponent from "../../../components/general/buttonComponent";
 import Tabla from "../../../components/general/tabla";
 import "../../../css/screens/coordinador/asignaturaDash.css";
 import "../../../css/screens/coordinador/rapDash.css";
+import dataServices from "../../../services/dataServices";
 
 function RapDash() {
     const navigate = useNavigate();
     const [activeTable, setActiveTable] = useState('competencias');
+    const [competenciaData, setcompetenciaData] = useState([]);
+    const [rapData, setRapData] = useState([]);
 
-
-    const competenciaHeaders = ["ID","Nombre","Descripcion","Nivel"];
+    const competenciaHeaders = ["ID","Descripcion","Nivel"];
     const rapHeaders = ["ID", "Competencias","Descripcion"];
 
-    const competenciaData = [
-        {
-            ID: 1,
-            Nombre: "Competencia 1",
-            Descripcion: "Capacidad de análisis crítico",
-            Nivel: "Avanzado"
-        },
-        {
-            ID: 2,
-            Nombre: "Competencia 2",
-            Descripcion: "Habilidad en resolución de problemas",
-            Nivel: "Intermedio"
-        },
-        {
-            ID: 3,
-            Nombre: "Competencia 3",
-            Descripcion: "Comunicación efectiva",
-            Nivel: "Básico"
-        },
-        {
-            ID: 4,
-            Nombre: "Competencia 4",
-            Descripcion: "Trabajo en equipo",
-            Nivel: "Avanzado"
-        }
-    ];
 
-    const rapData = [
-        {
-            ID: 1,
-            Competencias: "Capacidad de análisis crítico",
-            Descripcion: "Analizar y evaluar información de manera crítica"
-        },
-        {
-            ID: 2,
-            Competencias: "Habilidad en resolución de problemas",
-            Descripcion: "Resolver problemas complejos de manera eficiente"
-        },
-        {
-            ID: 3,
-            Competencias: "Comunicación efectiva",
-            Descripcion: "Comunicar ideas de manera clara y concisa"
-        },
-        {
-            ID: 4,
-            Competencias: "Trabajo en equipo",
-            Descripcion: "Colaborar efectivamente con otros en un equipo"
-        }
-    ];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result1 = await dataServices.consultaCompetencias();
+                console.log(result1);
+                setcompetenciaData(result1);
+            } catch (error) {
+                console.error('Error fetching docentes', error);
+            }
+            try {
+                const result2 = await dataServices.consultaRAP();
+                console.log( result2);
+                setRapData(result2);
+            } catch (error) {
+                console.error('Error fetching docentes', error);
+            }
+        };
+        fetchData();
+    }, []);
+
 
     const handleViewCreate = () => {
         navigate('/coordinador/RAP/crear');

@@ -4,22 +4,35 @@ import InputField from "../../../components/general/inputField";
 import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 import { useLocation } from "react-router-dom";
+import dataService from "../../../services/dataServices";
 
 function EditarRAPComp() {
-    
+
     const location = useLocation();
     const { rowData } = location.state;
     const [formData, setFormData] = useState(rowData || {});
 
+    console.log('rowData:', rowData);
     const options = [
-        { value: 'low', label: 'Baja' },
-        { value: 'mid', label: 'Media' },
-        { value: 'high', label: 'Alta' },
+        { value: 'BASICO', label: 'Basico' },
+        { value: 'INTERMEDIO', label: 'Intermedio' },
+        { value: 'AVANZADO', label: 'Avanzado' },
     ];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
+        const competenciaData = {
+            nombre: formData.nombre,
+            descripcion: formData.descripcion,
+            nivel: formData.nivel
+        };
+        try {
+            const response = await dataService.registroCompetencias(competenciaData);
+            console.log('Competencia creada:', response);
+        } catch (error) {
+            console.error('Error creating competencia', error);
+        }
     };
 
     const handleInputChange = (e) => {
@@ -29,9 +42,6 @@ function EditarRAPComp() {
             [name]: value
         });
     };
-
-
-
 
     const renderOptionSection = (title, name, value, isSelect = true, options = []) => (
         <div className={'optionSection'}>
@@ -59,26 +69,25 @@ function EditarRAPComp() {
 
     return (
         <ScreenBasic Title={'Gestion de competencias y RA por Asignatura'}>
-            <h2> Crear competencia </h2>
+            <h2> Editar competencia </h2>
             <form className={'formContainer'} onSubmit={handleSubmit}>
                 <div className={'crearAsignatura'}>
-
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nombre:', 'Nombre:', formData.Nombre, false)}
+                        {renderOptionSection('Nombre:', 'nombre', rowData.nombre, false)}
                     </div>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Descripcion:', 'Descripcion:', formData.Descripcion, false)}
+                        {renderOptionSection('Descripcion:', 'descripcion', rowData.Descripcion, false)}
                     </div>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nivel de competencia:', 'Nivel de competencia:', formData.Nivel, true, options)}
+                        {renderOptionSection('Nivel de competencia:', 'nivel', rowData.Nivel, true, options)}
                     </div>
                 </div>
                 <div className={'innerSection'}>
-                    <ButtonComponent title={'Crear Competencia'} className={'btnCrear'} type={'submit'}/>
+                    <ButtonComponent title={'Editar Competencia'} className={'btnCrear'} type={'submit'}/>
                 </div>
             </form>
         </ScreenBasic>
-);
+    );
 }
 
 export default EditarRAPComp;

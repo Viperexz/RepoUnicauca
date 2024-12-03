@@ -1,19 +1,24 @@
+import React, { useState } from "react";
 import "../../../css/screens/coordinador/crearAsignatura.css";
-import React from "react";
 import InputField from "../../../components/general/inputField";
 import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
+import dataService from "../../../services/dataServices";
 
 function CrearAsignatura() {
+    const [nombre, setNombre] = useState('');
+    const [creditos, setCreditos] = useState('');
+    const [semestre, setSemestre] = useState('');
+    const [descripcion, setDescripcion] = useState('');
 
-    const creditos = [
+    const creditosOptions = [
         { value: '1', label: '1' },
         { value: '2', label: '2' },
         { value: '3', label: '3' },
         { value: '4', label: '4' },
     ];
 
-    const semestre = [
+    const semestreOptions = [
         { value: '1', label: '1' },
         { value: '2', label: '2' },
         { value: '3', label: '3' },
@@ -26,11 +31,27 @@ function CrearAsignatura() {
         { value: '10', label: '10' },
     ];
 
-    const renderOptionSection = (title, isSelect = true, options = []) => (
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const asignaturaData = {
+            nombre,
+            creditos,
+            semestre,
+            descripcion
+        };
+        try {
+            const response = await dataService.registroAsignaturas(asignaturaData);
+            console.log('Asignatura creada:', response);
+        } catch (error) {
+            console.error('Error creating asignatura', error);
+        }
+    };
+
+    const renderOptionSection = (title, isSelect = true, options = [], value, setValue) => (
         <div className={'optionSection'}>
             <h3>{title}</h3>
             {isSelect ? (
-                <select>
+                <select value={value} onChange={(e) => setValue(e.target.value)}>
                     {options.map((option, index) => (
                         <option key={index} value={option.value}>
                             {option.label}
@@ -38,7 +59,7 @@ function CrearAsignatura() {
                     ))}
                 </select>
             ) : (
-                <InputField placeholder={title} />
+                <InputField placeholder={title} value={value} onChange={(e) => setValue(e.target.value)} />
             )}
         </div>
     );
@@ -51,26 +72,26 @@ function CrearAsignatura() {
     );
 
     return (
-
-
-        <ScreenBasic   Title={'Gestion de asignaturas'} >
-                <h2> Crear asignatura </h2>
-                <div className={'crearAsignatura'}>
+        <ScreenBasic Title={'Gestion de asignaturas'}>
+            <h2> Crear asignatura </h2>
+            <div className={'crearAsignatura'}>
+                <form onSubmit={handleSubmit}>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nombre asignatura:', false)}
-                        {renderOptionSection('Creditos de la asignatura:', true, creditos)}
-                        {renderOptionSection('Semestre',true,semestre)}
+                        {renderOptionSection('Nombre asignatura:', false, [], nombre, setNombre)}
+                        {renderOptionSection('Creditos de la asignatura:', true, creditosOptions, creditos, setCreditos)}
+                        {renderOptionSection('Semestre', true, semestreOptions, semestre, setSemestre)}
                     </div>
                     <h3>Descripcion:</h3>
-                    <textarea className={'txtDescripcion'}/>
+                    <textarea className={'txtDescripcion'} value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
                     <div className={'innerSection'}>
                         {renderInnerSection('Competencia')}
                         {renderInnerSection('Resultados')}
                     </div>
-                </div>
-                <div className={'innerSection'}>
-                    <ButtonComponent title={'Crear asignatura'} className={'btnCrear'}/>
-                </div>
+                    <div className={'innerSection'}>
+                        <ButtonComponent title={'Crear asignatura'} className={'btnCrear'} type="submit"/>
+                    </div>
+                </form>
+            </div>
         </ScreenBasic>
     );
 }

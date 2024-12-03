@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import './css/App.css';
 import ButtonComponent from "./components/general/buttonComponent";
 import InputField from "./components/general/inputField";
@@ -7,7 +7,8 @@ import { MdLockOutline } from "react-icons/md";
 import Unicauca from './img/logo/Unicauca.jpg';
 import Dev from './img/logo/Dev.jpg';
 import { useNavigate } from 'react-router-dom';
-import {UserContext} from "./components/Contexto/UsuarioContext";
+import { UserContext } from "./components/Contexto/UsuarioContext";
+import dataServices from './services/dataServices';
 
 function App() {
   const [username, setUsername] = useState('');
@@ -15,22 +16,23 @@ function App() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     console.log('Usuario:', username);
     console.log('Contraseña:', password);
-
-    // Simulate user data retrieval
-    const userData = {
-      numIdUsuario: '123456789',
-      nombreUsuario: 'Oscar',
-      apellidoUsuario:'Hoyos',
-      corroUsuario:'oscar@unicauca.edu.co',
-      rol: 1
-    };
-
-    setUser(userData);
     navigate('/coordinador', { state: { username, password } });
+    setUser({ numIdUsuario: '123', nombreUsuario: 'Juan', apellidoUsuario: 'Perez', correoUsuario: 'test@test.com',rol: 1});
+
+
+    /*try {
+      const credentials = { email: username, password: password };
+      const response = await dataServices.login(credentials); // Use the dataServices instance
+      setUser(response);
+      navigate('/coordinador', { state: { username, password } });
+    } catch (error) {
+      console.error('Error during login', error);
+      // Handle login error (e.g., show an error message to the user)
+    }*/
   };
 
   return (

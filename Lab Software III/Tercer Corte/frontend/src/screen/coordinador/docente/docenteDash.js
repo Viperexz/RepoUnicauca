@@ -1,68 +1,43 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../../css/screens/coordinador/asignaturaDash.css";
 import "../../../css/screens/coordinador/docenteDash.css";
-
-import React, { useState } from "react";
 import ButtonComponent from "../../../components/general/buttonComponent";
 import { FiPlusCircle } from "react-icons/fi";
 import Tabla from "../../../components/general/tabla";
-import { useNavigate } from "react-router-dom";
 import InputField from "../../../components/general/inputField";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import ScreenBasic from "../../../components/general/ScreenBasic";
+import dataServices from "../../../services/dataServices";
 
 function DocenteDash() {
     const navigate = useNavigate();
-     // Define el rol aquí
-
     const [searchField, setSearchField] = useState("Nombre");
     const [searchQuery, setSearchQuery] = useState("");
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await dataServices.consultaDocentes();
+                console.log(result);
+                setData(result);
+            } catch (error) {
+                console.error('Error fetching docentes', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleViewCreate = () => {
         navigate('/coordinador/docentes/crear');
     };
+
     const handleViewEdit = (rowData) => {
         navigate('/coordinador/docentes/editar', { state: { rowData } });
     };
 
     const headers = ["Nombre", "Apellidos", "Tipo identificacion", "Identificacion", "Tipo docente", "Correo electronico", "Asignaturas"];
-    const data = [
-        {
-            Nombre: "Juan",
-            Apellidos: "Pérez",
-            "Tipo identificacion": "Cédula",
-            Identificacion: "123456789",
-            "Tipo docente": "Titular",
-            "Correo electronico": "juan.perez@example.com",
-            Asignaturas: "Matemáticas"
-        },
-        {
-            Nombre: "María",
-            Apellidos: "Gómez",
-            "Tipo identificacion": "Pasaporte",
-            Identificacion: "987654321",
-            "Tipo docente": "Adjunto",
-            "Correo electronico": "maria.gomez@example.com",
-            Asignaturas: "Física"
-        },
-        {
-            Nombre: "Carlos",
-            Apellidos: "Rodríguez",
-            "Tipo identificacion": "Cédula",
-            Identificacion: "456789123",
-            "Tipo docente": "Titular",
-            "Correo electronico": "carlos.rodriguez@example.com",
-            Asignaturas: "Química"
-        },
-        {
-            Nombre: "Ana",
-            Apellidos: "Martínez",
-            "Tipo identificacion": "Pasaporte",
-            Identificacion: "321654987",
-            "Tipo docente": "Adjunto",
-            "Correo electronico": "ana.martinez@example.com",
-            Asignaturas: "Biología"
-        }
-    ];
 
     const filteredData = data.filter(item => {
         const value = item[searchField];
@@ -70,7 +45,7 @@ function DocenteDash() {
     });
 
     return (
-        <ScreenBasic  Title={'Gestion de docentes'}>
+        <ScreenBasic Title={'Gestion de docentes'}>
             <div className={'asignaturaContainer'}>
                 <div className={'optionHeader'}>
                     <h3>Se listaran los docentes registrados</h3>
