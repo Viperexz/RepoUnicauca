@@ -3,7 +3,7 @@ import axios from 'axios';
 const apiBaseUrl = 'http://localhost'; // Reemplaza con la URL base de tu API
 const competenciasServices = 'http://localhost:8001/competenciasrap/competencias';
 const docentesServices = 'http://localhost:8002/docentes';
-const asignaturasServices = 'http://localhost:8002/asignaturas';
+const asignaturasServices = 'http://localhost:8003/asignaturas';
 const rapServices = 'http://localhost:8001/competenciasrap/rap';
 const usuarioSerivec = 'http://localhost:8005/api/auth/signin';
 

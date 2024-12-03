@@ -20,9 +20,16 @@ function App() {
     e.preventDefault();
     console.log('Usuario:', username);
     console.log('Contraseña:', password);
-    navigate('/coordinador', { state: { username, password } });
-    setUser({ numIdUsuario: '123', nombreUsuario: 'Juan', apellidoUsuario: 'Perez', correoUsuario: 'test@test.com',rol: 1});
 
+
+    if(username === 'admin'){
+      setUser({ numIdUsuario: '123', nombreUsuario: 'Juan', apellidoUsuario: 'Perez', correoUsuario: 'test@test.com',rol: 1});
+      navigate('/coordinador', { state: { username, password } });
+    }
+    else {
+      setUser({ numIdUsuario: '123', nombreUsuario: 'Juan', apellidoUsuario: 'Perez', correoUsuario: 'test@test.com',rol: 0});
+      navigate('/docente', { state: { username, password } });
+    }
 
     /*try {
       const credentials = { email: username, password: password };

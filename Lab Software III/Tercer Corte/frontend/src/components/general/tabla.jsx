@@ -25,7 +25,7 @@ function Tabla({ headers, data, onClickEdit, onClickDelete }) {
             {headers.map((header, index) => (
               <th key={index}>{header}</th>
             ))}
-            <th>Acciones</th>
+            {(onClickEdit || onClickDelete) && <th>Acciones</th>}
           </tr>
         </thead>
         <tbody>
@@ -34,20 +34,24 @@ function Tabla({ headers, data, onClickEdit, onClickDelete }) {
               {headers.map((header, colIndex) => (
                 <td key={colIndex}>{row[header]}</td>
               ))}
-              <td>
-                <FaEdit className="edit-icon" onClick={() => onClickEdit(row)} />
-                <FaTrash className="delete-icon" onClick={() => handleDeleteClick(rowIndex)} />
-              </td>
+              {(onClickEdit || onClickDelete) && (
+                <td>
+                  {onClickEdit && <FaEdit className="edit-icon" onClick={() => onClickEdit(row)} />}
+                  {onClickDelete && <FaTrash className="delete-icon" onClick={() => handleDeleteClick(rowIndex)} />}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-      <ModalEliminar
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={handleDeleteConfirm}
-        message="¿Estás seguro de que deseas eliminar este elemento?"
-      />
+      {onClickDelete && (
+        <ModalEliminar
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          message="¿Estás seguro de que deseas eliminar este elemento?"
+        />
+      )}
     </>
   );
 }

@@ -19,7 +19,7 @@ function ScreenBasic({ Title = 'Title', children }) {
         { icon: <TbMedal2 />, label: 'Competencias y RA por Asignatura', route: '/coordinador/RAA' }
     ] : [
         { icon: <TbMedal2 />, label: 'Competencias y RA por Asignatura', route: '/test4' },
-        { icon: <FaCheck />, label: 'Rubricas', route: '/test5' },
+        { icon: <FaCheck />, label: 'Rubricas', route: '/docente/rubricas' },
     ];
 
     const handleNavigation = (route) => navigate(route);

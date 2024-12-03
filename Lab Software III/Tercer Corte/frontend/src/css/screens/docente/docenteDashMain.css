@@ -1,0 +1,11 @@
+Table tbody {
+   background: var(--secondary-color);
+}
+
+p{
+    font-size: var(--parrafo-font);
+}
+
+.specialCard{
+    background: var(--secondary-color);
+}

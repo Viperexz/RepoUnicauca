@@ -12,7 +12,6 @@ function EditarRAPComp() {
     const { rowData } = location.state;
     const [formData, setFormData] = useState(rowData || {});
 
-    console.log('rowData:', rowData);
     const options = [
         { value: 'BASICO', label: 'Basico' },
         { value: 'INTERMEDIO', label: 'Intermedio' },
@@ -21,17 +20,26 @@ function EditarRAPComp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+
+        // Validar que los campos no estén vacíos
+        if (!formData.nombre || !formData.descripcion || !formData.nivel) {
+            alert('Todos los campos son obligatorios.');
+            return;
+        }
+
         const competenciaData = {
             nombre: formData.nombre,
             descripcion: formData.descripcion,
             nivel: formData.nivel
         };
+
         try {
             const response = await dataService.registroCompetencias(competenciaData);
             console.log('Competencia creada:', response);
+            alert('Competencia actualizada correctamente.');
         } catch (error) {
             console.error('Error creating competencia', error);
+            alert('Error al actualizar la competencia.');
         }
     };
 
@@ -55,7 +63,13 @@ function EditarRAPComp() {
                     ))}
                 </select>
             ) : (
-                <InputField name={name} value={value} onChange={handleInputChange} inputClassName={'inputRap'} />
+                <InputField
+                    name={name}
+                    value={value}
+                    onChange={handleInputChange}
+                    inputClassName={'inputRap'}
+                    placeholder={value}
+                />
             )}
         </div>
     );
@@ -73,13 +87,13 @@ function EditarRAPComp() {
             <form className={'formContainer'} onSubmit={handleSubmit}>
                 <div className={'crearAsignatura'}>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nombre:', 'nombre', rowData.nombre, false)}
+                        {renderOptionSection('Nombre:', 'nombre', formData.nombre, false)}
                     </div>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Descripcion:', 'descripcion', rowData.Descripcion, false)}
+                        {renderOptionSection('Descripcion:', 'descripcion', formData.descripcion, false)}
                     </div>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nivel de competencia:', 'nivel', rowData.Nivel, true, options)}
+                        {renderOptionSection('Nivel de competencia:', 'nivel', formData.nivel, true, options)}
                     </div>
                 </div>
                 <div className={'innerSection'}>

@@ -25,6 +25,7 @@ function CoordinadorDash() {
                     <Card
                         title="Competencias y RA pendientes:50"
                         icon={<FaHome/>}
+                        className="specialCard"
                     />
                 </div>
             </ScreenBasic>
