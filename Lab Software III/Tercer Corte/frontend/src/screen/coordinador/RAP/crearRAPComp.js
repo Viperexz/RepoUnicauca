@@ -5,11 +5,13 @@ import InputField from "../../../components/general/inputField";
 import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 import dataService from "../../../services/dataServices";
+import TableModal from "../../../components/modal/modalTabla";
 
 function CrearRAPComp() {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [nivel, setNivel] = useState('');
+    const [nivel, setNivel] = useState('BASICO');
+
 
     const options = [
         { value: 'BASICO', label: 'Basico' },
@@ -75,7 +77,9 @@ function CrearRAPComp() {
                     <ButtonComponent title={'Crear Competencia'} className={'btnCrear'} type="submit" />
                 </div>
             </form>
+
         </ScreenBasic>
+
     );
 }
 

@@ -31,27 +31,14 @@ function TableModal({ isOpen, onRequestClose, data, columns, onRowSelect }) {
     );
 
     const handleRowSelect = (row) => {
-        if (!row || !row.original) {
-            console.error("Row data is undefined or invalid:", row);
-            return;
-        }
-
         const { id } = row.original;
-        if (!id) {
-            console.error("Row's original data does not contain an 'id':", row.original);
-            return;
-        }
-
         const isSelected = selectedRows.some((r) => r.id === id);
         const updatedRows = isSelected
             ? selectedRows.filter((r) => r.id !== id)
             : [...selectedRows, row.original];
 
         setSelectedRows(updatedRows);
-
-        if (typeof onRowSelect === 'function') {
-            onRowSelect(updatedRows);
-        }
+        onRowSelect(updatedRows);
     };
 
     const handleCancel = () => {
@@ -76,33 +63,33 @@ function TableModal({ isOpen, onRequestClose, data, columns, onRowSelect }) {
                 <div className="seccionTabla">
                     <table {...getTableProps()}>
                         <thead>
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                                ))}
-                                <th>Seleccionar</th>
-                            </tr>
-                        ))}
+                            {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map((column) => (
+                                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                    ))}
+                                    <th>Seleccionar</th>
+                                </tr>
+                            ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                        {page.map((row) => {
-                            prepareRow(row);
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map((cell) => (
-                                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                    ))}
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedRows.some((r) => r.id === row.original.id)}
-                                            onChange={() => handleRowSelect(row)}
-                                        />
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                            {page.map((row) => {
+                                prepareRow(row);
+                                return (
+                                    <tr {...row.getRowProps()}>
+                                        {row.cells.map((cell) => (
+                                            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                        ))}
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedRows.some((r) => r.id === row.original.id)}
+                                                onChange={() => handleRowSelect(row)}
+                                            />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -112,8 +99,8 @@ function TableModal({ isOpen, onRequestClose, data, columns, onRowSelect }) {
                             {'<'}
                         </button>
                         <span>
-              Página {pageIndex + 1} de {pageOptions.length}
-            </span>
+                            Página {pageIndex + 1} de {pageOptions.length}
+                        </span>
                         <button onClick={() => nextPage()} disabled={!canNextPage}>
                             {'>'}
                         </button>
