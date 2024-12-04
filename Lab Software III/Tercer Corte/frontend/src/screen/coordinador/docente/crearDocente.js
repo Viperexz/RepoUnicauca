@@ -5,7 +5,8 @@ import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 import TableModal from "../../../components/modal/modalTabla";
 import dataService from "../../../services/dataServices";
-import ModalConfirmar from "../../../components/modal/modalConfirmar";
+import ModalConfirmar from "../../../components/modal/modalNotificacion";
+import ModalNotificaciones from "../../../components/modal/modalNotificacion";
 
 function CrearDocente() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,11 +15,16 @@ function CrearDocente() {
 
     const [nombre, setNombre] = useState('');
     const [apellido, setapellido] = useState('');
-    const [tipoId, settipoId] = useState('');
+    const [tipoId, settipoId] = useState('CEDULA');
     const [numId, setnumId] = useState('');
-    const [tipoContrato, settipoContrato] = useState('');
+    const [tipoContrato, settipoContrato] = useState('CATEDRA');
     const [tituloAcademico, setTituloAcademico] = useState('');
     const [correo, setCorreo] = useState('');
+
+    /*Modal*/
+    const[titleModal, setTitleModal] = useState('');
+    const[contentModal, setContentModal] = useState('');
+    const [statusModal, setStatus] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,8 +44,14 @@ function CrearDocente() {
         try {
             const response = await dataService.registroDocentes(docenteData);
             console.log('competencia creada:', response);
+            setTitleModal('Confirmación');
+            setContentModal('Docente creado exitosamente');
+            setStatus('success');
             setIsConfirmModalOpen(true);
         } catch (error) {
+            setTitleModal('Error');
+            setContentModal('Error creando docente, verifique los campos');
+            setStatus('error');
             setIsConfirmModalOpen(true);
             console.error('Error creating competencia', error);
         }
@@ -115,7 +127,7 @@ function CrearDocente() {
         <div className={'optionSection'}>
             <h3>{title}</h3>
             {isSelect ? (
-                <select value={value} onChange={(e) => setValue(e.target.value)}>
+                <select className={'selectOption'} value={value} onChange={(e) => setValue(e.target.value)}>
                     {options.map((option, index) => (
                         <option key={index} value={option.value}>
                             {option.label}
@@ -123,7 +135,7 @@ function CrearDocente() {
                     ))}
                 </select>
             ) : (
-                <InputField placeholder={title} value={value} onChange={(e) => setValue(e.target.value)} />
+                <InputField placeholder={title} value={value} onChange={(e) => setValue(e.target.value)}/>
             )}
         </div>
     );
@@ -163,7 +175,7 @@ function CrearDocente() {
                         {renderInnerSection('Asignar asignatura. Seleccionadas:', selectedRows)}
                     </div>
                     <div className={'innerSection'}>
-                        <ButtonComponent title={'Crear docente'} className={'btnCrear'} type="submit" />
+                        <ButtonComponent title={'Crear docente'} className={'btnCrear'} type="submit"/>
                     </div>
                 </form>
             </div>
@@ -174,11 +186,12 @@ function CrearDocente() {
                 columns={columns}
                 onRowSelect={handleRowSelect}
             />
-            <ModalConfirmar
+            <ModalNotificaciones
                 isOpen={isConfirmModalOpen}
                 onClose={() => setIsConfirmModalOpen(false)}
-                Title="Confirmación"
-                message="Docente creado exitosamente"
+                Title={titleModal}
+                message={contentModal}
+                mode={statusModal}
             />
         </ScreenBasic>
     );

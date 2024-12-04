@@ -8,7 +8,7 @@ import Tabla from "../../../components/general/tabla";
 import "../../../css/screens/coordinador/asignaturaDash.css";
 import "../../../css/screens/coordinador/rapDash.css";
 import dataServices from "../../../services/dataServices";
-import ModalEliminar from "../../../components/modal/modalConfirmar";
+import ModalEliminar from "../../../components/modal/modalNotificacion";
 
 function RapDash() {
     const navigate = useNavigate();
