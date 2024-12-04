@@ -18,9 +18,6 @@ function App() {
 
  const handleLogin = async (e) => {
   e.preventDefault();
-  console.log('Usuario:', username);
-  console.log('Contraseña:', password);
-
   try {
     const credentials = { email: username, password: password };
     const response = await dataServices.login(credentials); // Use the dataServices instance
@@ -33,8 +30,11 @@ function App() {
       token: response.accessToken,
       rol: response.roles.includes('ROLE_COORDINADOR') ? 1 : 0 // Assuming 1 for coordinador, 0 for others
     };
+    console.log(userData)
 
     setUser(userData);
+
+    console.log(localStorage.getItem('user'));
 
     if (userData.rol === 1) {
       navigate('/coordinador', { state: { username, password } });

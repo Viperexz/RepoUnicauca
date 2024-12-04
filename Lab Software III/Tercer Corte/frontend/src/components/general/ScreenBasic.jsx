@@ -1,16 +1,14 @@
-// src/components/menu.jsx
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import '../../css/components/general/ScreenBasic.css';
 import Dev from "../../img/logo/Dev.jpg";
 import { FaHome, FaUser, FaCheck } from 'react-icons/fa';
 import { TbMedal2 } from "react-icons/tb";
-import { FiBookOpen, FiUsers  } from "react-icons/fi";
-import {useNavigate} from "react-router-dom";
+import { FiBookOpen, FiUsers } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Contexto/UsuarioContext";
 
 function ScreenBasic({ Title = 'Title', children }) {
-
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const menuItems = user.rol === 1 ? [
         { icon: <TbMedal2 />, label: 'Competencias y RA por Programa', route: '/coordinador/RAP' },
@@ -22,19 +20,22 @@ function ScreenBasic({ Title = 'Title', children }) {
         { icon: <FaCheck />, label: 'Rubricas', route: '/docente/rubricas' },
     ];
 
-    const handleNavigation = (route) => navigate(route);
+    const handleNavigation = (route) => {
+        if (route === '/') {
+            localStorage.removeItem('user');
+            setUser({ numIdUsuario: '', nombreUsuario: '', apellidoUsuario: '', correoUsuario: '', token: '', rol: 0 });
+        }
+        navigate(route);
+    };
 
     return (
         <div className="baseContainer">
             <div className="menu">
-                {/* Foto de Usuario */}
                 <div className="userData">
-                    <img src={Dev} alt="Logo de Usuario"/>
+                    <img src={Dev} alt="Logo de Usuario" />
                     <p className="nombreUsuario">{user.nombreUsuario} {user.apellidoUsuario}</p>
                     <p className="rolUsuario">{user.rol === 1 ? 'Coordinador' : 'Docente'}</p>
                 </div>
-
-                {/* Opciones de Menú */}
                 <div className="menuOptions">
                     {menuItems.map((item, index) => (
                         <button key={index} className="menuButton" onClick={() => handleNavigation(item.route)}>
@@ -43,12 +44,9 @@ function ScreenBasic({ Title = 'Title', children }) {
                         </button>
                     ))}
                 </div>
-
-                {/* Footer */}
                 <div className="menuFooter">
-                    <FaHome className="homeButton"
-                            onClick={() => handleNavigation(user.rol === 1 ? '/coordinador' : '/docente')}/>
-                    <p className="cerraSesion" onClick={() => handleNavigation('/')} >Cerrar Sesión</p>
+                    <FaHome className="homeButton" onClick={() => handleNavigation(user.rol === 1 ? '/coordinador' : '/docente')} />
+                    <p className="cerraSesion" onClick={() => handleNavigation('/')}>Cerrar Sesión</p>
                 </div>
             </div>
             <div className="dashContainer">
@@ -58,8 +56,7 @@ function ScreenBasic({ Title = 'Title', children }) {
                 {children}
             </div>
         </div>
-)
-    ;
+    );
 }
 
 export default ScreenBasic;

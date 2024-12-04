@@ -92,6 +92,7 @@ function CrearAsignatura() {
                     </div>
                 </form>
             </div>
+
         </ScreenBasic>
     );
 }

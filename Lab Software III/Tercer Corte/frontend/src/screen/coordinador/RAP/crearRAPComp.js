@@ -6,11 +6,18 @@ import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 import dataService from "../../../services/dataServices";
 import TableModal from "../../../components/modal/modalTabla";
+import ModalNotificaciones from "../../../components/modal/modalNotificacion";
 
 function CrearRAPComp() {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [nivel, setNivel] = useState('BASICO');
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+    /*Modal*/
+    const[titleModal, setTitleModal] = useState('');
+    const[contentModal, setContentModal] = useState('');
+    const [statusModal, setStatus] = useState('');
 
 
     const options = [
@@ -29,6 +36,9 @@ function CrearRAPComp() {
         try {
             const response = await dataService.registroCompetencias(competenciaData);
             console.log('competencia creada:', response);
+            setTitleModal('Confirmación');
+            setContentModal('Docente creado exitosamente');
+            setStatus('success');
         } catch (error) {
             console.error('Error creating competencia', error);
         }
@@ -77,6 +87,13 @@ function CrearRAPComp() {
                     <ButtonComponent title={'Crear Competencia'} className={'btnCrear'} type="submit" />
                 </div>
             </form>
+            <ModalNotificaciones
+                isOpen={isConfirmModalOpen}
+                onClose={() => setIsConfirmModalOpen(false)}
+                Title={titleModal}
+                message={contentModal}
+                mode={statusModal}
+            />
 
         </ScreenBasic>
 
