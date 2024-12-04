@@ -15,6 +15,8 @@ import CrearRAPComp from "./screen/coordinador/RAP/crearRAPComp";
 import EditarRAPComp from "./screen/coordinador/RAP/editarRAPComp";
 import DocenteDashMain from "./screen/docente/docenteDashMain";
 import RubricaDash from "./screen/docente/rubricas/rubricaDash";
+import CrearRAP from "./screen/coordinador/RAP/crearRAP";
+import EditarRAP from "./screen/coordinador/RAP/editarRAP";
 
 
 
@@ -45,11 +47,13 @@ function AppRoutes() {
                         <Route path="/coordinador/docentes/editar" element={<EditarDocente/>} />
                         {/* Rutas RAA/> */}
                         <Route path="/coordinador/RAA" element={<RaaDash/>} />
+
                         {/* Rutas RAP/> */}
                         <Route path="/coordinador/RAP" element={<RapDash/>} />
-                        <Route path="/coordinador/RAP/crear" element={<CrearRAPComp/>} />
-                        <Route path="/coordinador/RAP/editar" element={<EditarRAPComp/>} />
-
+                        <Route path="/coordinador/Compe/crear" element={<CrearRAPComp/>} />
+                        <Route path="/coordinador/Compe/editar" element={<EditarRAPComp/>} />
+                        <Route path="/coordinador/RAP/crear" element={<CrearRAP/>} />
+                        <Route path="/coordinador/RAP/editar" element={<EditarRAP/>} />
 
 
                         {/* Docente/> */}

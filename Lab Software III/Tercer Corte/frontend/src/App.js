@@ -16,31 +16,36 @@ function App() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log('Usuario:', username);
-    console.log('Contraseña:', password);
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  console.log('Usuario:', username);
+  console.log('Contraseña:', password);
 
+  try {
+    const credentials = { email: username, password: password };
+    const response = await dataServices.login(credentials); // Use the dataServices instance
 
-    if(username === 'admin'){
-      setUser({ numIdUsuario: '123', nombreUsuario: 'Juan', apellidoUsuario: 'Perez', correoUsuario: 'test@test.com',rol: 1});
+    const userData = {
+      numIdUsuario: response.id,
+      nombreUsuario: response.email.split('@')[0], // Assuming the name is the part before the @
+      apellidoUsuario: '', // No last name in the JSON, set it as empty
+      correoUsuario: response.email,
+      token: response.accessToken,
+      rol: response.roles.includes('ROLE_COORDINADOR') ? 1 : 0 // Assuming 1 for coordinador, 0 for others
+    };
+
+    setUser(userData);
+
+    if (userData.rol === 1) {
       navigate('/coordinador', { state: { username, password } });
-    }
-    else {
-      setUser({ numIdUsuario: '123', nombreUsuario: 'Juan', apellidoUsuario: 'Perez', correoUsuario: 'test@test.com',rol: 0});
+    } else {
       navigate('/docente', { state: { username, password } });
     }
-
-    /*try {
-      const credentials = { email: username, password: password };
-      const response = await dataServices.login(credentials); // Use the dataServices instance
-      setUser(response);
-      navigate('/coordinador', { state: { username, password } });
-    } catch (error) {
-      console.error('Error during login', error);
-      // Handle login error (e.g., show an error message to the user)
-    }*/
-  };
+  } catch (error) {
+    console.error('Error during login', error);
+    // Handle login error (e.g., show an error message to the user)
+  }
+};
 
   return (
     <div className="App">

@@ -4,19 +4,6 @@ import '../../css/components/general/tabla.css';
 import ModalEliminar from "../modal/modalEliminar";
 
 function Tabla({ headers, data, onClickEdit, onClickDelete }) {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-
-  const handleDeleteClick = (rowIndex) => {
-    setSelectedRow(rowIndex);
-    setModalOpen(true);
-  };
-
-  const handleDeleteConfirm = () => {
-    onClickDelete(selectedRow);
-    setModalOpen(false);
-  };
-
   return (
     <>
       <table className="generalTable">
@@ -37,21 +24,13 @@ function Tabla({ headers, data, onClickEdit, onClickDelete }) {
               {(onClickEdit || onClickDelete) && (
                 <td>
                   {onClickEdit && <FaEdit className="edit-icon" onClick={() => onClickEdit(row)} />}
-                  {onClickDelete && <FaTrash className="delete-icon" onClick={() => handleDeleteClick(rowIndex)} />}
+                  {onClickDelete && <FaTrash className="delete-icon" onClick={() => onClickDelete(row)} />}
                 </td>
               )}
             </tr>
           ))}
         </tbody>
       </table>
-      {onClickDelete && (
-        <ModalEliminar
-          isOpen={isModalOpen}
-          onClose={() => setModalOpen(false)}
-          onConfirm={handleDeleteConfirm}
-          message="¿Estás seguro de que deseas eliminar este elemento?"
-        />
-      )}
     </>
   );
 }

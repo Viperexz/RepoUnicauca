@@ -36,6 +36,9 @@ function DocenteDash() {
     const handleViewEdit = (rowData) => {
         navigate('/coordinador/docentes/editar', { state: { rowData } });
     };
+    const handleViewDelete = (rowData) => {
+        console.log("Eliminar", rowData);
+    };
 
     const headers = ["Nombre", "Apellidos", "Tipo identificacion", "Identificacion", "Tipo docente", "Correo electronico", "Asignaturas"];
 
@@ -61,7 +64,7 @@ function DocenteDash() {
                     <InputField placeholder={'Buscar'} icon={<RxMagnifyingGlass />} inputClassName={'buscarField'} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
                 <div className={'asignTable'}>
-                    <Tabla headers={headers} data={filteredData} onClickEdit={handleViewEdit} />
+                    <Tabla headers={headers} data={filteredData} onClickEdit={handleViewEdit} onClickDelete={handleViewDelete}/>
                 </div>
             </div>
         </ScreenBasic>

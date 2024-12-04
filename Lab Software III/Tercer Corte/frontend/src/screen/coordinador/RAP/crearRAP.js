@@ -6,7 +6,7 @@ import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 import dataService from "../../../services/dataServices";
 
-function CrearRAPComp() {
+function CrearRAP() {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [nivel, setNivel] = useState('');
@@ -58,17 +58,14 @@ function CrearRAPComp() {
 
     return (
         <ScreenBasic Title={'Gestion de competencias y RA por Asignatura'}>
-            <h2> Crear Competencia </h2>
+            <h2> Crear Resultado de Aprendizaje </h2>
             <form className={'formulario'} onSubmit={handleSubmit}>
                 <div className={'crearAsignatura'}>
-                    <div className={'innerSection'}>
-                        {renderOptionSection('Nombre:', false, [], nombre, setNombre)}
-                    </div>
                     <div className={'innerSection'}>
                         {renderOptionSection('Descripcion:', false, [], descripcion, setDescripcion)}
                     </div>
                     <div className={'innerSection'}>
-                        {renderOptionSection('Nivel de competencia:', true, options, nivel, setNivel)}
+                        {renderInnerSection('Competencias')}
                     </div>
                 </div>
                 <div className={'innerSection'}>
@@ -79,4 +76,4 @@ function CrearRAPComp() {
     );
 }
 
-export default CrearRAPComp;
+export default CrearRAP;

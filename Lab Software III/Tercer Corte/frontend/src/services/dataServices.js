@@ -12,7 +12,7 @@ const dataService = {
 
         login: async (credentials) => {
         try {
-            const response = await axios.post(`${usuarioSerivec}/api/auth/signin`, credentials);
+            const response = await axios.post(`${usuarioSerivec}`, credentials);
             return response.data;
         } catch (error) {
             console.error('Error during login', error);
@@ -51,20 +51,23 @@ const dataService = {
             const response = await axios.post(`${competenciasServices}`, asignaturaData);
             return response.data;
         } catch (error) {
-            console.error('Error registering asignatura', error);
+            console.error('Error registering competencia', error);
             throw error;
         }
     },
 
-    eliminarCompetencias: async (id) => {
+   eliminarCompetencias: async (id) => {
+        console.log('Se eliminara: ', id);
         try {
-            const response = await axios.delete(`${competenciasServices}/${id}`);
+            const response = await axios.delete(`${competenciasServices}?id=${id}`);
             return response.data;
         } catch (error) {
-            console.error('Error deleting asignatura', error);
+            console.error('Error deleting competencia', error);
             throw error;
         }
     },
+
+
     /*Manejo de RAP*/
     consultaRAP: async () => {
         try {
@@ -72,7 +75,7 @@ const dataService = {
             return response.data.map(RAP => ({
                 ID: RAP.id,
                 Descripcion: RAP.descripcion,
-                Competencia: RAP.competencia.descripcion.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, char => char.toUpperCase()),
+                Competencias: RAP.competencia.descripcion.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, char => char.toUpperCase()),
             }));
         } catch (error) {
             console.error('Error fetching asignaturas', error);
@@ -102,7 +105,7 @@ const dataService = {
 
     eliminarRAP: async (id) => {
         try {
-            const response = await axios.delete(`${competenciasServices}/${id}`);
+            const response = await axios.delete(`${competenciasServices}?id=${id}`);
             return response.data;
         } catch (error) {
             console.error('Error deleting asignatura', error);
@@ -144,7 +147,7 @@ const dataService = {
 
     registroDocentes: async (asignaturaData) => {
         try {
-            const response = await axios.post(`${asignaturasServices}`, asignaturaData);
+            const response = await axios.post(`${docentesServices}`, asignaturaData);
             return response.data;
         } catch (error) {
             console.error('Error registering asignatura', error);
@@ -161,13 +164,22 @@ const dataService = {
             throw error;
         }
     },
+
+
     /*Manejo asignaturas*/
     consultaAsignaturas: async () => {
         try {
             const response = await axios.get(`${asignaturasServices}`);
-            return response.data;
+            return response.data.map(asignatura => ({
+                Nombre: asignatura.nombre,
+                Descripcion: asignatura.descripcion,
+                Creditos: asignatura.numCreditos,
+                Semestre: asignatura.semestreAsignatura,
+                Estado: asignatura.estado,
+                Competencias: asignatura.competencias.join(', ') // Assuming asignaturas is an array
+            }));
         } catch (error) {
-            console.error('Error fetching asignaturas', error);
+            console.error('Error fetching docentes', error);
             throw error;
         }
     },

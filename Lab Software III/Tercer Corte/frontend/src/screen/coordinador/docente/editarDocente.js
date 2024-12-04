@@ -5,6 +5,7 @@ import ButtonComponent from "../../../components/general/buttonComponent";
 import ScreenBasic from "../../../components/general/ScreenBasic";
 import { useLocation } from "react-router-dom";
 import TableModal from "../../../components/modal/modalTabla";
+import dataService from "../../../services/dataServices";
 
 function EditarDocente() {
 
@@ -46,7 +47,25 @@ function EditarDocente() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
+        /*const docenteData = {
+            tipoIdentificacion: ,
+            identificacion:,
+            nombres: ,
+            apellidos: ,
+            email: ,
+            tituloAcademico:,
+            estado: "ACTIVO",
+            contrasenia: ,
+            tipoDocente: ,
+            asignaturas: []
+        };
+        console.log('competenciaData:', competenciaData);
+        try {
+            const response = await dataService.registroCompetencias(competenciaData);
+            console.log('competencia creada:', response);
+        } catch (error) {
+            console.error('Error creating competencia', error);
+        }*/
     };
 
     const renderOptionSection = (title, name, value, isSelect = true, options = []) => (
