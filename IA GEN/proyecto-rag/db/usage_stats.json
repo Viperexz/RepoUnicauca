@@ -1,0 +1,16 @@
+{
+  "total_sessions": 8,
+  "total_answers": 7,
+  "total_questions": 24,
+  "total_score": 0.95,
+  "total_uploads": 1,
+  "last_session": "2026-05-05T23:33:27",
+  "session_durations": [
+    184.017007,
+    89.604039
+  ],
+  "session_tokens": [
+    2288,
+    2206
+  ]
+}
