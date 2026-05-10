@@ -1,4 +1,6 @@
+import re
 import requests
+<<<<<<< Updated upstream
 import json
 from collections import Counter
 
@@ -338,3 +340,108 @@ Fragmento (fuente: {fuente}):
             "fuente": fuente,
             "tokens": len(prompt.split()) + len(respuesta_usuario.split()),
         }
+=======
+from query import queryEmb
+
+
+def _limitar_contexto(chunks, max_chars=3000):
+    partes = []
+    total = 0
+    for chunk in chunks:
+        if not chunk or not chunk.strip():
+            continue
+        piece = chunk.strip()
+        if total + len(piece) > max_chars:
+            remaining = max_chars - total
+            if remaining > 0:
+                partes.append(piece[:remaining])
+            break
+        partes.append(piece)
+        total += len(piece)
+    return "\n\n".join(partes)
+
+
+def generar_preguntas(chunks, tema="", dificultad="media", tipo_eval="abierta", cantidad=5):
+    texto = _limitar_contexto(chunks, max_chars=3000)
+    if not texto:
+        return "No hay contexto suficiente para generar preguntas."
+
+    tipo_eval = (tipo_eval or "abierta").strip().lower()
+    dificultad = (dificultad or "media").strip().lower()
+    tema = tema.strip() if tema else "general"
+
+    instrucciones_tipo = (
+        "Si el tipo es opcion_multiple, crea 4 opciones por pregunta. "
+        "Si es mixto, alterna preguntas abiertas y de opcion_multiple."
+    )
+
+    pregunta = (
+        "Eres un asistente educativo.\n"
+        f"Tema: {tema}. Dificultad: {dificultad}. Tipo: {tipo_eval}.\n"
+        f"Genera {cantidad} preguntas para evaluar aprendizaje.\n"
+        f"{instrucciones_tipo}\n"
+        "Usa solo el contexto dado.\n\n"
+        f"Contexto:\n{texto}"
+    )
+
+    try:
+        response = requests.post(
+            "http://localhost:11434/api/chat",
+            json={
+                "model": "mistral:7b-instruct",
+                "messages": [{"role": "user", "content": pregunta}],
+                "stream": False
+            },
+            timeout=30
+        )
+        response.raise_for_status()
+        data = response.json()
+        content = data.get("message", {}).get("content")
+        if not content:
+            return "Respuesta invalida del modelo."
+        print("Respuesta de la pregunta: ")
+        return content
+    except requests.exceptions.ConnectionError:
+        return "Error de conexion con Ollama."
+    except requests.exceptions.Timeout:
+        return "Tiempo de espera agotado al generar preguntas."
+    except requests.exceptions.HTTPError:
+        return "Error HTTP al generar preguntas."
+    except ValueError:
+        return "Respuesta invalida del modelo."
+
+
+def evaluar_respuesta(pregunta, respuesta_usuario):
+    resultados = queryEmb(pregunta)
+    if not resultados:
+        return {
+            "score": 0.0,
+            "feedback": "No se encontro contexto relacionado para evaluar.",
+            "fragmento": "",
+            "documento": None
+        }
+
+    fragmento = resultados[0].get("texto", "")
+    documento = resultados[0].get("documento")
+
+    user_tokens = set(re.findall(r"\w+", (respuesta_usuario or "").lower()))
+    frag_tokens = set(re.findall(r"\w+", (fragmento or "").lower()))
+    if not user_tokens or not frag_tokens:
+        score = 0.0
+    else:
+        score = len(user_tokens & frag_tokens) / len(user_tokens | frag_tokens)
+
+    if score >= 0.6:
+        feedback = "Buen trabajo. La respuesta cubre los puntos clave."
+    elif score >= 0.3:
+        feedback = "Respuesta aceptable, pero falta precision en algunos puntos."
+    else:
+        feedback = "La respuesta es debil o incompleta. Revisa el material."
+
+    return {
+        "score": round(score, 2),
+        "feedback": feedback,
+        "fragmento": fragmento,
+        "documento": documento
+    }
+>>>>>>> Stashed changes

@@ -6,10 +6,19 @@ import chromadb
 import fitz
 from sentence_transformers import SentenceTransformer
 
+<<<<<<< Updated upstream
 DEFAULT_DATA_DIR = Path("data")
 DEFAULT_DB_DIR = Path("db")
 DEFAULT_MANIFEST_PATH = DEFAULT_DB_DIR / "ingestion_manifest.json"
 COLLECTION_NAME = "uni_docs"
+=======
+#Zona de variables
+dataDir = "data/"
+model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+client = chromadb.PersistentClient(path="db/")
+collection = client.get_or_create_collection(name="uni_docs", metadata={"hnsw:space": "cosine"})
+#====================
+>>>>>>> Stashed changes
 
 _MODEL = None
 _COLLECTION = None
@@ -68,6 +77,7 @@ def chunks_spliter(text: str, chunk_size: int = 300, overlap: int = 50) -> list[
     return chunks
 
 
+<<<<<<< Updated upstream
 def _extract_text(file_path: Path) -> str:
     doc = fitz.open(file_path)
     extracted_text = ""
@@ -145,5 +155,73 @@ def carga_archivos_nuevos(
 # Backward compatibility with previous function name.
 def cargaArchivos() -> dict:
     return carga_archivos_nuevos()
+=======
+#Recorrido archivo
+def cargaArchivos():
+    files = [os.path.join(dataDir, f) for f in os.listdir(dataDir) if f.endswith(".pdf")]
+    if len(files) == 0:
+        print("No pdf files found")
+        return
+
+    for file in files:
+        doc = fitz.open(file)
+        extracted_text = ""
+        for page_num in range(doc.page_count):
+            page = doc[page_num]
+            extracted_text += page.get_text()
+        doc.close()
+
+        if not extracted_text.strip():
+            print(f"Skipping PDF without text: {file}")
+            continue
+
+        chunks = [c.strip() for c in split_chunks(extracted_text) if c.strip()]
+        if not chunks:
+            print(f"Skipping PDF with empty chunks: {file}")
+            continue
+
+        ids = [f"{file}_{i}" for i in range(len(chunks))]
+        existing = collection.get(ids=ids)
+        existing_ids = set(existing.get("ids", []))
+
+        new_documents = []
+        new_ids = []
+        new_metadatas = []
+        for chunk, chunk_id in zip(chunks, ids):
+            if chunk_id in existing_ids:
+                continue
+            new_documents.append(chunk)
+            new_ids.append(chunk_id)
+            new_metadatas.append({"source": os.path.basename(file), "path": file})
+
+        if not new_documents:
+            print(f"No new chunks to add for: {file}")
+            continue
+
+        embeddings = model.encode(new_documents)
+        collection.add(
+            documents=new_documents,
+            embeddings=embeddings.tolist(),
+            metadatas=new_metadatas,
+            ids=new_ids
+        )
+        print("========DEBUG========")
+        print(f"Total new chunks: {len(new_documents)}")
+        print(f"Primer chunk:\n{new_documents[0]}")
+        print(embeddings.shape)
+        print("========DEBUG========")
+
+
+def list_pdfs():
+    return sorted([f for f in os.listdir(dataDir) if f.endswith(".pdf")])
+
+
+def delete_document(filename: str):
+    file_path = os.path.join(dataDir, filename)
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Archivo no encontrado: {file_path}")
+    os.remove(file_path)
+    collection.delete(where={"source": filename})
+>>>>>>> Stashed changes
 
 

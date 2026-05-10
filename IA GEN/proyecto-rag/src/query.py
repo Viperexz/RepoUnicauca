@@ -31,6 +31,7 @@ def query_embeddings(consulta: str, n_results: int = 6, max_distance: float | No
     embedding = model.encode(consulta).tolist()
     results = collection.query(
         query_embeddings=[embedding],
+<<<<<<< Updated upstream
         n_results=n_results,
         include=["documents", "metadatas", "distances"],
     )
@@ -58,3 +59,23 @@ def query_embeddings(consulta: str, n_results: int = 6, max_distance: float | No
 def queryEmb(consulta):
     contextos = query_embeddings(consulta, n_results=3, max_distance=None)
     return {"documents": [[c["text"] for c in contextos]], "metadatas": [[c["metadata"] for c in contextos]]}
+=======
+        n_results=3,
+        include=["documents", "metadatas"]
+    )
+    print("========DEBUG========")
+    print(results)
+    print("========DEBUG========")
+    docs = results.get("documents", [[]])
+    metas = results.get("metadatas", [[]])
+    if not docs or not docs[0]:
+        return []
+
+    cleaned = []
+    for doc_text, meta in zip(docs[0], metas[0]):
+        cleaned.append({
+            "texto": doc_text,
+            "documento": meta.get("source") if meta else None
+        })
+    return cleaned
+>>>>>>> Stashed changes

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import argparse
 import json
 
@@ -45,3 +46,14 @@ def main() -> None:
 
 if __name__ == "__main__":
 	main()
+=======
+from query import queryEmb
+from generador import generar_preguntas
+from pdf import cargaArchivos
+#Inicializacion de data
+consulta = "Tema: Daniel Pecaut"
+resultados = queryEmb(consulta)
+chunks = [r["texto"] for r in resultados]
+preguntas = generar_preguntas(chunks, tema="Daniel Pecaut", dificultad="media", tipo_eval="abierta", cantidad=5)
+print(preguntas)
+>>>>>>> Stashed changes

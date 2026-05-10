@@ -1,4 +1,5 @@
 import json
+<<<<<<< Updated upstream
 import re
 from datetime import datetime
 from pathlib import Path
@@ -783,3 +784,600 @@ with tab_stats:
     else:
         st.info("📭 No hay respuestas en sesiones actuales. ¡Inicia una para ver estadísticas!")
 
+=======
+import os
+import re
+import sys
+import time
+import unicodedata
+
+import requests
+import streamlit as st
+
+BASE_DIR = os.path.dirname(__file__)
+SRC_DIR = os.path.join(BASE_DIR, "src")
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
+
+from pdf import cargaArchivos, list_pdfs, delete_document, dataDir
+from query import queryEmb
+from generador import generar_preguntas, evaluar_respuesta
+
+STATS_FILE = os.path.join(BASE_DIR, "session_stats.json")
+
+
+def _normalize(text: str) -> str:
+    normalized = unicodedata.normalize("NFD", text)
+    return "".join(c for c in normalized if unicodedata.category(c) != "Mn").lower()
+
+
+def _parse_request(message: str):
+    normalized = _normalize(message)
+
+    dificultad = "media"
+    if "dificil" in normalized:
+        dificultad = "dificil"
+    elif "facil" in normalized:
+        dificultad = "facil"
+
+    tipo_eval = "abierta"
+    if "opcion" in normalized and "multiple" in normalized:
+        tipo_eval = "opcion_multiple"
+    elif "mixto" in normalized or "mixta" in normalized:
+        tipo_eval = "mixto"
+    elif "abierta" in normalized:
+        tipo_eval = "abierta"
+
+    cantidad = 5
+    number_match = re.search(r"(\d+)", normalized)
+    if number_match:
+        cantidad = max(1, min(20, int(number_match.group(1))))
+
+    tema = ""
+    for key in ["tema", "sobre", "de"]:
+        match = re.search(rf"{key}\s+([a-z0-9\s_-]+)", normalized)
+        if match:
+            tema = match.group(1).strip()
+            break
+
+    if tema:
+        stop_words = {
+            "pregunta", "preguntas", "dificil", "facil", "media",
+            "opcion", "multiple", "mixto", "abierta", "abiertas",
+            "dificultad", "evaluacion", "evaluar"
+        }
+        tokens = [t for t in tema.split() if t not in stop_words]
+        tema = " ".join(tokens).strip()
+
+    return {
+        "tema": tema or "general",
+        "dificultad": dificultad,
+        "tipo_eval": tipo_eval,
+        "cantidad": cantidad
+    }
+
+
+def _parse_request_with_flags(message: str):
+    normalized = _normalize(message)
+    flags = {"tema": False, "dificultad": False, "tipo_eval": False, "cantidad": False}
+
+    dificultad = "media"
+    if "dificil" in normalized:
+        dificultad = "dificil"
+        flags["dificultad"] = True
+    elif "facil" in normalized:
+        dificultad = "facil"
+        flags["dificultad"] = True
+    elif "media" in normalized:
+        flags["dificultad"] = True
+
+    tipo_eval = "abierta"
+    if "opcion" in normalized and "multiple" in normalized:
+        tipo_eval = "opcion_multiple"
+        flags["tipo_eval"] = True
+    elif "mixto" in normalized or "mixta" in normalized:
+        tipo_eval = "mixto"
+        flags["tipo_eval"] = True
+    elif "abierta" in normalized:
+        flags["tipo_eval"] = True
+
+    cantidad = 5
+    number_match = re.search(r"(\d+)", normalized)
+    if number_match:
+        cantidad = max(1, min(20, int(number_match.group(1))))
+        flags["cantidad"] = True
+
+    tema = ""
+    for key in ["tema", "sobre", "de"]:
+        match = re.search(rf"{key}\s+([a-z0-9\s_-]+)", normalized)
+        if match:
+            tema = match.group(1).strip()
+            flags["tema"] = True
+            break
+
+    if tema:
+        stop_words = {
+            "pregunta", "preguntas", "dificil", "facil", "media",
+            "opcion", "multiple", "mixto", "abierta", "abiertas",
+            "dificultad", "evaluacion", "evaluar"
+        }
+        tokens = [t for t in tema.split() if t not in stop_words]
+        tema = " ".join(tokens).strip()
+
+    return {
+        "tema": tema or "general",
+        "dificultad": dificultad,
+        "tipo_eval": tipo_eval,
+        "cantidad": cantidad
+    }, flags
+
+
+def _is_eval_intent(message: str) -> bool:
+    normalized = _normalize(message)
+    keywords = [
+        "pregunta", "preguntas", "evaluacion", "evaluar",
+        "dificil", "facil", "media", "opcion", "multiple", "mixto"
+    ]
+    if re.search(r"\d+", normalized):
+        return True
+    return any(k in normalized for k in keywords)
+
+
+def _detect_wants_eval(message: str) -> bool:
+    normalized = _normalize(message)
+    keywords = ["estudiar", "evaluacion", "evaluar", "preguntas", "examen", "quiz"]
+    return any(k in normalized for k in keywords)
+
+
+def _is_greeting(message: str) -> bool:
+    normalized = _normalize(message).strip()
+    greetings = {
+        "hola", "buenas", "buenos dias", "buenas tardes", "buenas noches",
+        "hello", "hi", "hey", "saludos"
+    }
+    return normalized in greetings
+
+
+def _next_missing_field(flags):
+    order = ["tema", "cantidad", "dificultad", "tipo_eval"]
+    for field in order:
+        if not flags.get(field, False):
+            return field
+    return None
+
+
+def _missing_fields(flags):
+    return [k for k, v in flags.items() if not v]
+
+
+def _ollama_chat(messages):
+    try:
+        response = requests.post(
+            "http://localhost:11434/api/chat",
+            json={
+                "model": "mistral:7b-instruct",
+                "messages": messages,
+                "stream": False
+            },
+            timeout=30
+        )
+        response.raise_for_status()
+        data = response.json()
+        content = data.get("message", {}).get("content")
+        if not content:
+            return "No pude generar una respuesta en este momento."
+        return content
+    except requests.exceptions.ConnectionError:
+        return "No puedo conectar con Ollama en este momento."
+    except requests.exceptions.Timeout:
+        return "Se agoto el tiempo de espera con Ollama."
+    except requests.exceptions.HTTPError:
+        return "Error HTTP al consultar Ollama."
+    except ValueError:
+        return "Respuesta invalida de Ollama."
+
+
+def _load_stats():
+    if not os.path.exists(STATS_FILE):
+        return []
+    with open(STATS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_stats(stats):
+    with open(STATS_FILE, "w", encoding="utf-8") as f:
+        json.dump(stats, f, indent=2)
+
+
+def _estimate_tokens(text: str) -> int:
+    return max(1, len(text) // 4)
+
+
+def _init_state():
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    if "settings" not in st.session_state:
+        st.session_state.settings = {
+            "tema": "general",
+            "dificultad": "media",
+            "tipo_eval": "abierta",
+            "cantidad": 5
+        }
+    if "settings_flags" not in st.session_state:
+        st.session_state.settings_flags = {
+            "tema": False,
+            "dificultad": False,
+            "tipo_eval": False,
+            "cantidad": False
+        }
+    if "wants_eval" not in st.session_state:
+        st.session_state.wants_eval = False
+    if "evaluation" not in st.session_state:
+        st.session_state.evaluation = {
+            "active": False,
+            "current_question": None,
+            "current_index": 0,
+            "total": 0,
+            "results": [],
+            "start_time": None,
+            "tokens": 0,
+            "awaiting_answer": False
+        }
+    if "stats" not in st.session_state:
+        st.session_state.stats = _load_stats()
+
+
+_init_state()
+
+st.title("Demo RAG - Evaluacion")
+
+st.sidebar.header("Documentos")
+
+uploaded_files = st.sidebar.file_uploader(
+    "Subir PDFs",
+    type=["pdf"],
+    accept_multiple_files=True
+)
+
+if uploaded_files:
+    os.makedirs(dataDir, exist_ok=True)
+    for uploaded in uploaded_files:
+        save_path = os.path.join(dataDir, uploaded.name)
+        if os.path.exists(save_path):
+            base, ext = os.path.splitext(uploaded.name)
+            count = 1
+            while os.path.exists(save_path):
+                save_path = os.path.join(dataDir, f"{base}_{count}{ext}")
+                count += 1
+        with open(save_path, "wb") as f:
+            f.write(uploaded.getbuffer())
+    st.sidebar.success("PDFs guardados. Presiona 'Procesar PDFs'.")
+
+if st.sidebar.button("Procesar PDFs"):
+    cargaArchivos()
+    st.sidebar.success("Procesamiento completado.")
+
+st.sidebar.subheader("Listado de PDFs")
+existing_pdfs = list_pdfs()
+if existing_pdfs:
+    selected = st.sidebar.selectbox("Selecciona para eliminar", existing_pdfs)
+    if st.sidebar.button("Eliminar documento"):
+        delete_document(selected)
+        st.sidebar.success("Documento eliminado.")
+else:
+    st.sidebar.info("No hay PDFs cargados.")
+
+tabs = st.tabs(["Chat", "Evaluacion", "Estadisticas", "Debug"])
+
+with tabs[0]:
+    st.header("Chat")
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    user_message = st.chat_input("Escribe tu mensaje")
+    if user_message:
+        st.session_state.messages.append({"role": "user", "content": user_message})
+        st.session_state.evaluation["tokens"] += _estimate_tokens(user_message)
+
+        eval_state = st.session_state.evaluation
+        if eval_state["active"] and eval_state["awaiting_answer"]:
+            evaluacion = evaluar_respuesta(eval_state["current_question"], user_message)
+            evaluacion.update({
+                "pregunta": eval_state["current_question"],
+                "respuesta": user_message
+            })
+            eval_state["results"].append(evaluacion)
+            eval_state["tokens"] += _estimate_tokens(user_message)
+            eval_state["current_index"] += 1
+            eval_state["awaiting_answer"] = False
+
+            feedback_message = _ollama_chat([
+                {
+                    "role": "system",
+                    "content": (
+                        "Eres un evaluador educativo. Responde en una frase breve. "
+                        "Si score >= 0.6 di 'Respuesta correcta'. "
+                        "Si score < 0.6 di 'Respuesta incorrecta' y da una sugerencia corta."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        f"Pregunta: {evaluacion['pregunta']}\n"
+                        f"Respuesta usuario: {evaluacion['respuesta']}\n"
+                        f"Score: {evaluacion['score']}\n"
+                        f"Feedback base: {evaluacion['feedback']}"
+                    )
+                }
+            ])
+
+            if eval_state["current_index"] >= eval_state["total"]:
+                eval_state["active"] = False
+                duration = time.time() - eval_state["start_time"]
+                st.session_state.stats.append({
+                    "tokens": eval_state["tokens"],
+                    "duration": round(duration, 2)
+                })
+                _save_stats(st.session_state.stats)
+
+                scores = [r["score"] for r in eval_state["results"]]
+                total_score = sum(scores)
+                avg_score = total_score / len(scores)
+                debiles = [r for r in eval_state["results"] if r["score"] < 0.6]
+                fragments = "\n\n".join(
+                    [f"Documento: {r['documento']}\nFragmento: {r['fragmento']}" for r in debiles]
+                )
+                final_feedback = _ollama_chat([
+                    {
+                        "role": "system",
+                        "content": (
+                            "Eres un tutor. Resume debilidades y sugiere que reforzar en 3-5 lineas. "
+                            "Usa los fragmentos como evidencia."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": (
+                            f"Puntaje total: {round(total_score, 2)}\n"
+                            f"Promedio: {round(avg_score, 2)}\n"
+                            f"Fragmentos debiles:\n{fragments}"
+                        )
+                    }
+                ])
+                response_text = (
+                    f"{feedback_message}\n\n"
+                    f"Puntaje final: {round(total_score, 2)} (Promedio: {round(avg_score, 2)})\n"
+                    f"Retroalimentacion final:\n{final_feedback}"
+                )
+            else:
+                resultados = queryEmb(st.session_state.settings["tema"])
+                chunks = [r["texto"] for r in resultados]
+                pregunta = generar_preguntas(
+                    chunks,
+                    tema=st.session_state.settings["tema"],
+                    dificultad=st.session_state.settings["dificultad"],
+                    tipo_eval=st.session_state.settings["tipo_eval"],
+                    cantidad=1
+                )
+                eval_state["current_question"] = pregunta
+                eval_state["awaiting_answer"] = True
+                response_text = (
+                    f"{feedback_message}\n\n"
+                    f"Pregunta {eval_state['current_index'] + 1}:\n{pregunta}"
+                )
+        else:
+            parsed, flags = _parse_request_with_flags(user_message)
+            if _is_greeting(user_message):
+                st.session_state.wants_eval = True
+                next_field = _next_missing_field(st.session_state.settings_flags)
+                response_text = _ollama_chat([
+                    {
+                        "role": "system",
+                        "content": (
+                            "Eres un tutor conversacional. Responde saludo y pide solo un dato faltante "
+                            "para iniciar evaluacion. Se breve."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": f"El dato faltante actual es: {next_field}."
+                    }
+                ])
+            elif st.session_state.wants_eval or _detect_wants_eval(user_message) or _is_eval_intent(user_message) or any(flags.values()):
+                st.session_state.wants_eval = True
+                st.session_state.settings.update(parsed)
+                for key, value in flags.items():
+                    if value:
+                        st.session_state.settings_flags[key] = True
+
+                missing = _missing_fields(st.session_state.settings_flags)
+                if missing:
+                    next_field = _next_missing_field(st.session_state.settings_flags)
+                    response_text = _ollama_chat([
+                        {
+                            "role": "system",
+                            "content": (
+                                "Eres un tutor. Pide la informacion faltante de forma breve y amigable. "
+                                "Pregunta solo por un campo faltante en este orden: tema, cantidad, dificultad, tipo_eval."
+                            )
+                        },
+                        {
+                            "role": "user",
+                            "content": (
+                                f"Mensaje usuario: {user_message}\n"
+                                f"Campos faltantes: {', '.join(missing)}\n"
+                                f"Siguiente campo a pedir: {next_field}"
+                            )
+                        }
+                    ])
+                else:
+                    resultados = queryEmb(st.session_state.settings["tema"])
+                    if not resultados:
+                        response_text = "No encontre informacion relacionada en los documentos para ese tema."
+                    else:
+                        eval_state.update({
+                            "active": True,
+                            "current_question": None,
+                            "current_index": 0,
+                            "total": st.session_state.settings["cantidad"],
+                            "results": [],
+                            "start_time": time.time(),
+                            "tokens": 0,
+                            "awaiting_answer": False
+                        })
+                        chunks = [r["texto"] for r in resultados]
+                        pregunta = generar_preguntas(
+                            chunks,
+                            tema=st.session_state.settings["tema"],
+                            dificultad=st.session_state.settings["dificultad"],
+                            tipo_eval=st.session_state.settings["tipo_eval"],
+                            cantidad=1
+                        )
+                        eval_state["current_question"] = pregunta
+                        eval_state["awaiting_answer"] = True
+                        st.session_state.wants_eval = False
+                        st.session_state.settings_flags = {
+                            "tema": False,
+                            "dificultad": False,
+                            "tipo_eval": False,
+                            "cantidad": False
+                        }
+                        response_text = (
+                            "Evaluacion iniciada:\n\n"
+                            f"Pregunta 1:\n{pregunta}"
+                        )
+            else:
+                resultados = queryEmb(user_message)
+                context = resultados[0]["texto"] if resultados else ""
+                response_text = _ollama_chat([
+                    {
+                        "role": "system",
+                        "content": (
+                            "Eres un asistente educativo. Responde en espanol de forma clara y breve. "
+                            "Usa el contexto si esta disponible."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": (
+                            f"Contexto:\n{context}\n\n"
+                            f"Pregunta: {user_message}"
+                        )
+                    }
+                ])
+
+        st.session_state.messages.append({"role": "assistant", "content": response_text})
+        # Force a clean rerun so the chat is rendered only from session history in correct order.
+        st.rerun()
+
+with tabs[1]:
+    settings = st.session_state.settings
+    st.header("Evaluacion")
+    if st.button("Iniciar evaluacion"):
+        resultados = queryEmb(settings["tema"])
+        if not resultados:
+            st.warning("No se encontraron resultados para el tema.")
+        else:
+            st.session_state.evaluation.update({
+                "active": True,
+                "current_question": None,
+                "current_index": 0,
+                "total": settings["cantidad"],
+                "results": [],
+                "start_time": time.time(),
+                "tokens": 0
+            })
+
+    if st.session_state.evaluation["active"]:
+        eval_state = st.session_state.evaluation
+        if eval_state["current_question"] is None:
+            resultados = queryEmb(settings["tema"])
+            chunks = [r["texto"] for r in resultados]
+            pregunta = generar_preguntas(
+                chunks,
+                tema=settings["tema"],
+                dificultad=settings["dificultad"],
+                tipo_eval=settings["tipo_eval"],
+                cantidad=1
+            )
+            eval_state["current_question"] = pregunta
+            eval_state["tokens"] += _estimate_tokens(pregunta)
+
+        st.subheader(f"Pregunta {eval_state['current_index'] + 1} de {eval_state['total']}")
+        st.write(eval_state["current_question"])
+        respuesta = st.text_area("Tu respuesta", key=f"respuesta_{eval_state['current_index']}")
+
+        if st.button("Evaluar respuesta"):
+            evaluacion = evaluar_respuesta(eval_state["current_question"], respuesta)
+            evaluacion.update({
+                "pregunta": eval_state["current_question"],
+                "respuesta": respuesta
+            })
+            eval_state["results"].append(evaluacion)
+            eval_state["tokens"] += _estimate_tokens(respuesta)
+            eval_state["current_index"] += 1
+            eval_state["current_question"] = None
+
+            if eval_state["current_index"] >= eval_state["total"]:
+                eval_state["active"] = False
+                duration = time.time() - eval_state["start_time"]
+                st.session_state.stats.append({
+                    "tokens": eval_state["tokens"],
+                    "duration": round(duration, 2)
+                })
+                _save_stats(st.session_state.stats)
+
+    st.subheader("Resultados")
+    results = st.session_state.evaluation["results"]
+    if results:
+        scores = [r["score"] for r in results]
+        total_score = sum(scores)
+        avg_score = total_score / len(scores)
+        st.metric("Puntaje total", round(total_score, 2))
+        st.metric("Promedio", round(avg_score, 2))
+
+        st.subheader("Detalle")
+        for r in results:
+            st.markdown(f"**Pregunta:** {r['pregunta']}")
+            st.markdown(f"**Respuesta:** {r['respuesta']}")
+            st.markdown(f"**Score:** {r['score']} - {r['feedback']}")
+            st.markdown(f"**Documento:** {r['documento']}")
+            st.markdown("---")
+
+        st.subheader("Retroalimentacion final")
+        fallos = [r for r in results if r["score"] < 0.6]
+        if not fallos:
+            st.success("Excelente desempeño. No hay temas por reforzar.")
+        else:
+            for r in fallos:
+                similares = queryEmb(r["pregunta"])
+                similares_docs = [s["documento"] for s in similares if s.get("documento")]
+                st.markdown(
+                    f"Debes reforzar: {settings['tema']} - (Documento: {r['documento']})"
+                )
+                st.markdown(f"Chunk relacionado: {r['fragmento']}")
+                if similares_docs:
+                    st.markdown(f"Temas similares en embeddings: {', '.join(similares_docs)}")
+                st.markdown("---")
+
+with tabs[2]:
+    st.header("Estadisticas")
+    if st.session_state.stats:
+        tokens_series = [s["tokens"] for s in st.session_state.stats]
+        durations = [s["duration"] for s in st.session_state.stats]
+        st.line_chart(tokens_series)
+        st.bar_chart(durations)
+        st.metric("Promedio de tiempo", round(sum(durations) / len(durations), 2))
+    else:
+        st.info("Sin estadisticas aun.")
+
+with tabs[3]:
+    st.header("Debug")
+    st.subheader("Parametros detectados")
+    st.write(st.session_state.settings)
+    st.subheader("Estado de evaluacion")
+    st.json(st.session_state.evaluation)
+    st.subheader("Mensajes")
+    st.json(st.session_state.messages)
+>>>>>>> Stashed changes
